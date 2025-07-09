@@ -4,14 +4,13 @@ import { RiCommunityLine } from "react-icons/ri";
 import { motion } from "motion/react";
 import { FiGrid } from "react-icons/fi";
 import office from "../assets/office.png";
-
 import useUser from "../hooks/useUser";
 
 const Navbar = () => {
   const { user } = useUser();
 
   const LgMenu = () => (
-    <div className="navbar bg-teal-800 text-white w-6/12 m-8 px-4 rounded-xl absolute right-3/12 shadow-sm">
+    <div className="navbar bg-teal-800 text-white w-6/12 m-8 px-4 rounded-xl fixed right-3/12 shadow-sm">
       <div className="flex-1 flex items-center">
         <motion.a
           whileHover={{ scale: 1.05 }}
@@ -19,7 +18,7 @@ const Navbar = () => {
           className="flex items-center gap-1 cursor-pointer item-end"
         >
           <img src={office} className="w-12 h-12" alt="icon" />
-          <span className="text-xl"> RentLogic</span>
+          <span className="text-xl"> HomeHorizon</span>
         </motion.a>
       </div>
       <div className="flex-none">
@@ -75,7 +74,7 @@ const Navbar = () => {
             >
               <li>
                 <a onClick={() => document.activeElement.blur()}>
-                  {user?.name || "Guest"}
+                  {user?.name}
                 </a>
               </li>
               <li>
@@ -101,7 +100,7 @@ const Navbar = () => {
           className="flex items-end text-white gap-1 cursor-pointer item-end"
         >
           <img src={office} className="w-12 h-12" alt="icon" />
-          <span className="text-2xl"> RentLogic</span>
+          <span className="text-2xl"> HomeHorizon</span>
         </motion.a>
       </div>
       <div className="flex-none ">
@@ -122,7 +121,7 @@ const Navbar = () => {
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
+            <ul className="menu bg-base-200  text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
               {/* Sidebar content here */}
 
               <li
@@ -152,10 +151,17 @@ const Navbar = () => {
                   document.getElementById("my-drawer").checked = false;
                 }}
               >
-                <a className="flex items-center gap-2">
-                  <FiLogIn />
-                  Login
-                </a>
+                {user ? (
+                  <a className="flex items-center gap-2">
+                    <FiLogIn />
+                    Logout
+                  </a>
+                ) : (
+                  <a className="flex items-center gap-2">
+                    <FiLogIn />
+                    Login
+                  </a>
+                )}
               </li>
 
               <li>
@@ -177,10 +183,15 @@ const Navbar = () => {
   );
 
   return (
-    <div>
-      <div className="largeDisplayMenu lg:block hidden">
+    <div className="sticky z-10">
+      <motion.div
+        className="largeDisplayMenu lg:block hidden"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
+      >
         <LgMenu />
-      </div>
+      </motion.div>
 
       <div className="smallDisplayMenu lg:hidden block">
         <SmMenu />
