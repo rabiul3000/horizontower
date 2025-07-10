@@ -35,7 +35,7 @@ const AboutBuilding = () => {
         >
           <div>
             <h1 className="text-4xl w-fit">
-              HomeHorizon - Smart Residential Complex
+              Horizon Tower - Smart Residential Complex
             </h1>
           </div>
           <div className="flex justify-end">
@@ -53,7 +53,7 @@ const AboutBuilding = () => {
           variants={fadeUp}
         >
           <p>
-            <span className="text-2xl">H</span>omeHorizon is a modern, mid-rise
+            <span className="text-2xl">H</span>orizon Tower is a modern, mid-rise
             smart apartment complex designed for urban families and working
             professionals. The building consists of
             <li>5 floors,</li>
