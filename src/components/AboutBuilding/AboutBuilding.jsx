@@ -53,9 +53,9 @@ const AboutBuilding = () => {
           variants={fadeUp}
         >
           <p>
-            <span className="text-2xl">H</span>orizon Tower is a modern, mid-rise
-            smart apartment complex designed for urban families and working
-            professionals. The building consists of
+            <span className="text-2xl">H</span>orizon Tower is a modern,
+            mid-rise smart apartment complex designed for urban families and
+            working professionals. The building consists of
             <li>5 floors,</li>
             <li>with 4 apartments on each floor,</li>
             <li>totaling 20 units.</li>
@@ -137,6 +137,46 @@ const AboutBuilding = () => {
               <p className="text-sm">$1,500/month</p>
             </div>
           </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="single-unit lg:w-8/12 w-11/12 h-full flex flex-col lg:items-start items-center gap-8 py-24 mx-auto">
+        <motion.div
+          custom={0}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeUp}
+          className="flex lg:flex-row flex-col gap-4 justify-between items-end"
+        >
+          <div className="flex flex-col gap-4">
+            <button className="btn btn-wide glass text-white">
+              Single Unit Plan
+            </button>
+            <p className="text-white">
+              Explore the spacious and thoughtfully designed single unit layout
+              of our Horizon Tower apartments. Each section is planned for
+              modern living, comfort, and function — ideal for families or
+              individuals who appreciate space and elegance.
+            </p>
+            <ul className="grid grid-cols-1 gap-2">
+              <li className="bg-teal-900 p-2">Living Room 22 m²</li>
+              <li className="bg-teal-900 p-2">Dinning Room 15 m²</li>
+              <li className="bg-teal-900 p-2">Kitchen 15 m²</li>
+              <li className="bg-teal-900 p-2">Master Bedroom 16 m²</li>
+              <li className="bg-teal-900 p-2">Kids Bedroom 12 m²</li>
+              <li className="bg-teal-900 p-2">Bath Room 6 m²</li>
+              <li className="bg-teal-900 p-2">Guest Toilet 2 m²</li>
+              <li className="bg-teal-900 p-2">Balcony 5 m²</li>
+              <li className="bg-teal-900 p-2">Storage Room 3 m²</li>
+            </ul>
+          </div>
+          <div>
+            <img
+              src="https://reactheme.com/products/wordpress/residem/wp-content/uploads/2025/05/floorplan-2-color-1.webp"
+              alt="floor"
+            />
+          </div>
         </motion.div>
       </div>
     </motion.div>
