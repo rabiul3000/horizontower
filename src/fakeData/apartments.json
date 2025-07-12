@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,1",
+    "floor": 1,
+    "block": "A",
+    "apartmentNumber": "A-101",
+    "rent": 1200
+  },
+  {
+    "id": 2,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,2",
+    "floor": 1,
+    "block": "A",
+    "apartmentNumber": "A-102",
+    "rent": 1250
+  },
+  {
+    "id": 3,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,3",
+    "floor": 1,
+    "block": "A",
+    "apartmentNumber": "A-103",
+    "rent": 1150
+  },
+  {
+    "id": 4,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,4",
+    "floor": 1,
+    "block": "A",
+    "apartmentNumber": "A-104",
+    "rent": 1100
+  },
+  {
+    "id": 5,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,5",
+    "floor": 2,
+    "block": "B",
+    "apartmentNumber": "B-201",
+    "rent": 1300
+  },
+  {
+    "id": 6,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,6",
+    "floor": 2,
+    "block": "B",
+    "apartmentNumber": "B-202",
+    "rent": 1280
+  },
+  {
+    "id": 7,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,7",
+    "floor": 2,
+    "block": "B",
+    "apartmentNumber": "B-203",
+    "rent": 1260
+  },
+  {
+    "id": 8,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,8",
+    "floor": 2,
+    "block": "B",
+    "apartmentNumber": "B-204",
+    "rent": 1290
+  },
+  {
+    "id": 9,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,9",
+    "floor": 3,
+    "block": "C",
+    "apartmentNumber": "C-301",
+    "rent": 1400
+  },
+  {
+    "id": 10,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,10",
+    "floor": 3,
+    "block": "C",
+    "apartmentNumber": "C-302",
+    "rent": 1420
+  },
+  {
+    "id": 11,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,11",
+    "floor": 3,
+    "block": "C",
+    "apartmentNumber": "C-303",
+    "rent": 1380
+  },
+  {
+    "id": 12,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,12",
+    "floor": 3,
+    "block": "C",
+    "apartmentNumber": "C-304",
+    "rent": 1370
+  },
+  {
+    "id": 13,
+    "image": "https://loremflickr.com/400/250/building,flat",
+    "floor": 4,
+    "block": "D",
+    "apartmentNumber": "D-401",
+    "rent": 1450
+  },
+  {
+    "id": 14,
+    "image": "https://loremflickr.com/400/250/building,flat",
+    "floor": 4,
+    "block": "D",
+    "apartmentNumber": "D-402",
+    "rent": 1480
+  },
+  {
+    "id": 15,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,15",
+    "floor": 4,
+    "block": "D",
+    "apartmentNumber": "D-403",
+    "rent": 1440
+  },
+  {
+    "id": 16,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,16",
+    "floor": 4,
+    "block": "D",
+    "apartmentNumber": "D-404",
+    "rent": 1430
+  },
+  {
+    "id": 17,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,17",
+    "floor": 5,
+    "block": "E",
+    "apartmentNumber": "E-501",
+    "rent": 1550
+  },
+  {
+    "id": 18,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,18",
+    "floor": 5,
+    "block": "E",
+    "apartmentNumber": "E-502",
+    "rent": 1520
+  },
+  {
+    "id": 19,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,19",
+    "floor": 5,
+    "block": "E",
+    "apartmentNumber": "E-503",
+    "rent": 1530
+  },
+  {
+    "id": 20,
+    "image": "https://source.unsplash.com/600x400/?apartment,interior,20",
+    "floor": 5,
+    "block": "E",
+    "apartmentNumber": "E-504",
+    "rent": 1500
+  }
+]

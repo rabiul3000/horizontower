@@ -5,47 +5,85 @@ import { motion } from "motion/react";
 import { FiGrid } from "react-icons/fi";
 import office from "../assets/office.png";
 import useUser from "../hooks/useUser";
+import { Link } from "react-router";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const { user } = useUser();
 
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        // scrolling down
+        setShowNavbar(false);
+      } else {
+        // scrolling up
+        setShowNavbar(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
   const LgMenu = () => (
-    <div className="navbar bg-teal-800 text-white w-6/12 m-8 px-4 rounded-xl fixed right-3/12 shadow-sm">
+    <div
+      className={`navbar bg-teal-800 text-white w-6/12 m-8 mx-auto px-4 rounded-xl shadow-sm fixed top-0 left-3/12 z-50
+    
+    ${
+      showNavbar
+        ? "opacity-100 translate-y-0 duration-1000 ease-in-out"
+        : "opacity-0"
+    }
+  `}
+    >
       <div className="flex-1 flex items-center">
-        <motion.a
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-1 cursor-pointer item-end"
-        >
-          <img src={office} className="w-12 h-12" alt="icon" />
-          <span className="text-xl"> HomeHorizon</span>
-        </motion.a>
+        <Link to={"/"}>
+          <motion.span
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-1 cursor-pointer item-end"
+          >
+            <img src={office} className="w-12 h-12" alt="icon" />
+            <span className="text-xl"> HomeHorizon</span>
+          </motion.span>
+        </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1 flex items-center gap-4">
           {/* Home Link */}
-          <li>
-            <motion.a
+          <Link to={"/"}>
+            <motion.span
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-1"
             >
               <FiHome className="text-lg" />
               Home
-            </motion.a>
-          </li>
+            </motion.span>
+          </Link>
 
           {/* Apartment Link */}
-          <li>
-            <motion.a
+          <Link to={"/apartment"} className="flex items-center gap-1">
+            <motion.span
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-1"
             >
               <RiCommunityLine className="text-lg" />
               Apartment
-            </motion.a>
-          </li>
+            </motion.span>
+          </Link>
 
           {/* User / Login Dropdown */}
           <div className="dropdown dropdown-end text-black font-semibold">
@@ -94,14 +132,16 @@ const Navbar = () => {
     <div className="navbar bg-teal-800 shadow-sm">
       <div className="flex-none"></div>
       <div className="flex-1">
-        <motion.a
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-end text-white gap-1 cursor-pointer item-end"
-        >
-          <img src={office} className="w-12 h-12" alt="icon" />
-          <span className="text-2xl"> HomeHorizon</span>
-        </motion.a>
+        <Link to={"/"}>
+          <motion.span
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-end text-white gap-1 cursor-pointer item-end"
+          >
+            <img src={office} className="w-12 h-12" alt="icon" />
+            <span className="text-2xl"> HomeHorizon</span>
+          </motion.span>
+        </Link>
       </div>
       <div className="flex-none ">
         <div className="drawer drawer-end">
@@ -140,10 +180,10 @@ const Navbar = () => {
                   document.getElementById("my-drawer").checked = false;
                 }}
               >
-                <a className="flex items-center gap-2">
+                <Link to={"/apartment"} className="flex items-center gap-2">
                   <FiHome />
                   Apartment
-                </a>
+                </Link>
               </li>
 
               <li
@@ -183,15 +223,10 @@ const Navbar = () => {
   );
 
   return (
-    <div className="sticky z-10">
-      <motion.div
-        className="largeDisplayMenu lg:block hidden"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
-      >
+    <div className="">
+      <div className="largeDisplayMenu lg:block hidden z-50">
         <LgMenu />
-      </motion.div>
+      </div>
 
       <div className="smallDisplayMenu lg:hidden block">
         <SmMenu />
