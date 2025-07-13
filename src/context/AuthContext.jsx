@@ -7,10 +7,11 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({
     name: "John Doe",
     email: "email@gmail.com",
+    role: "user",
   });
 
   const userInfo = {
-    user,
+    user: null,
     userLoading,
   };
 

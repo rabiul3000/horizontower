@@ -1,6 +1,6 @@
 import { FiHome, FiLogIn, FiMenu, FiXCircle } from "react-icons/fi";
 
-import { RiCommunityLine } from "react-icons/ri";
+import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
 import { motion } from "motion/react";
 import { FiGrid } from "react-icons/fi";
 import office from "../assets/office.png";
@@ -85,10 +85,22 @@ const Navbar = () => {
             </motion.span>
           </Link>
 
+          {/* dashboard Link */}
+          <Link to={"/dashboard"} className="flex items-center gap-1">
+            <motion.span
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-1"
+            >
+              <RiDashboardLine className="text-lg" />
+              Dashboard
+            </motion.span>
+          </Link>
+
           {/* User / Login Dropdown */}
           <div className="dropdown dropdown-end text-black font-semibold">
             <div tabIndex={0} role="button">
-              {!user ? (
+              {user ? (
                 <motion.div whileHover={{ scale: 1.05 }} className="avatar">
                   <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                     <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
@@ -115,12 +127,28 @@ const Navbar = () => {
                   {user?.name}
                 </a>
               </li>
-              <li>
-                <a onClick={() => document.activeElement.blur()}>Dashboard</a>
-              </li>
-              <li>
-                <a onClick={() => document.activeElement.blur()}>Logout</a>
-              </li>
+              {user && (
+                <>
+                  <li><a onClick={() => document.activeElement.blur()}>Dashboard</a></li>
+                  <li><a onClick={() => document.activeElement.blur()}>Logout</a></li>
+                </>
+              )}
+
+              {!user && (
+                <>
+                  <li>
+                    <Link
+                      to="/register"
+                      onClick={() => document.activeElement.blur()}
+                    >
+                      Register
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to='/login' onClick={() => document.activeElement.blur()}>Login</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </ul>
@@ -169,10 +197,10 @@ const Navbar = () => {
                   document.getElementById("my-drawer").checked = false;
                 }}
               >
-                <a className="flex items-center gap-2">
-                  <FiGrid />
-                  Dashboard
-                </a>
+                <Link to={"/"} className="flex items-center gap-2">
+                  <FiHome />
+                  Home
+                </Link>
               </li>
 
               <li
@@ -181,8 +209,19 @@ const Navbar = () => {
                 }}
               >
                 <Link to={"/apartment"} className="flex items-center gap-2">
-                  <FiHome />
+                  <RiCommunityLine />
                   Apartment
+                </Link>
+              </li>
+
+              <li
+                onClick={() => {
+                  document.getElementById("my-drawer").checked = false;
+                }}
+              >
+                <Link to={"/dashboard"} className="flex items-center gap-2">
+                  <FiGrid />
+                  Dashboard
                 </Link>
               </li>
 
