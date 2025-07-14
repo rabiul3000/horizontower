@@ -4,6 +4,7 @@ import banner1 from "../../assets/banners/banner1.jpg";
 import banner2 from "../../assets/banners/banner2.jpg";
 import banner3 from "../../assets/banners/banner3.jpg";
 import banner4 from "../../assets/banners/banner4.jpg";
+import { Link } from "react-router";
 
 const Banners = () => {
   const slides = [banner1, banner2, banner3, banner4];
@@ -41,7 +42,7 @@ const Banners = () => {
                 <button className="btn glass px-6 text-white">
                   Search a Room
                 </button>
-                <button className="btn px-6">Login</button>
+                <Link className="btn px-6" to={'/login'}>Login</Link>
               </div>
 
               <div className="flex flex-col lg:flex-row lg:m-24 my-6 gap-3 lg:gap-24">

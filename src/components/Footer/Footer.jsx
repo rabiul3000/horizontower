@@ -12,7 +12,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 flex flex-col lg:flex-row justify-between items-start gap-8">
         {/* Logo + Description */}
         <div className="flex flex-col gap-4 max-w-sm">
-          <h2 className="text-2xl font-bold">HomeHorizon</h2>
+          <h2 className="text-2xl font-bold">Horizon Tower</h2>
           <p className="text-gray-300">
             A smarter way to live — combining modern design, intelligent
             amenities, and connected community living in one place.
@@ -50,7 +50,7 @@ const Footer = () => {
 
       {/* Bottom line */}
       <div className="mt-12 text-center text-gray-400 text-sm border-t border-teal-800 pt-4">
-        © {new Date().getFullYear()} HomeHorizon. All rights reserved.
+        © {new Date().getFullYear()} Horizon Tower. All rights reserved.
       </div>
     </footer>
   );

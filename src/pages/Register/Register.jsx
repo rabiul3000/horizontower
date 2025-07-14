@@ -1,35 +1,82 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Paper,
-  Typography,
-  Stack,
-  Avatar,
-} from "@mui/material";
+import React, { useContext, useState } from "react";
+import { TextField, Button, Paper, Typography, Avatar } from "@mui/material";
 import InputFileUpload from "../../utils/InputFileUpload";
 import PasswordInput from "../../utils/PasswordInput";
 import saveImageToDB from "../../services/saveImageToDB";
+import { FcGoogle } from "react-icons/fc";
+import { AuthContext } from "../../context/AuthContext";
+import { errorAlert, successAlert } from "../../utils/alerts";
+import { Link, useNavigate } from "react-router";
+import auth from "../../firebase.init";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const Register = () => {
   const [imageFile, setImageFile] = useState(null);
   const [password, setPassword] = useState("");
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const provider = new GoogleAuthProvider();
 
-  const handleSubmit = (e) => {
+  const { emailSignIn, updateUser, setUser } = useContext(AuthContext);
+
+  const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
+
+    // Upload image first
+    setLoading(true);
+    const uploadedImageURL = await saveImageToDB(imageFile);
+
+    if (!uploadedImageURL) {
+      errorAlert("Image upload failed. Please try again.");
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData(form);
     formData.append("password", password);
-    const uploadAndGetImageURL = saveImageToDB(imageFile);
-    
+    formData.append("photoURL", uploadedImageURL);
+
     const userData = Object.fromEntries(formData.entries());
 
-    console.log(userData);
+    emailSignIn(userData)
+      .then((userCredential) => {
+        updateUser(userData)
+          .then(() => {
+            console.log(userCredential.user);
+            setUser(userCredential.user);
+            successAlert("Account created successfully!");
+            setLoading(false);
+            form.reset();
+            navigate("/");
+          })
+          .catch((err) => {
+            errorAlert(err.message);
+            setLoading(false);
+          });
+      })
+      .catch((err) => {
+        errorAlert(err.message);
+        setLoading(false);
+      });
+  };
+
+  const handleGoogleSignIn = async () => {
+    return signInWithPopup(auth, provider)
+      .then((result) => {
+        setUser(result.user);
+        successAlert("Account created successfully!");
+        navigate("/");
+      })
+      .catch((error) => {
+        errorAlert(error.message);
+      });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen lg:my-20 bg-gray-100">
       <Paper
         elevation={3}
         className="p-8 w-full max-w-md shadow-md rounded-lg bg-white"
@@ -67,6 +114,7 @@ const Register = () => {
             variant="outlined"
             required
           />
+
           <PasswordInput setPassword={setPassword} password={password} />
 
           <Button
@@ -75,17 +123,35 @@ const Register = () => {
             sx={{ backgroundColor: "teal" }}
             fullWidth
             className="!mt-4 !py-3"
-            disabled={!passwordRegex}
+            disabled={!isPasswordValid || !imageFile || loading}
           >
-            Register
+            {loading ? (
+              <span className="loading loading-sm loading-bars"></span>
+            ) : (
+              "Register"
+            )}
+          </Button>
+
+          <Button
+            type="button"
+            startIcon={<FcGoogle />}
+            variant="contained"
+            fullWidth
+            className="!mt-4 !py-3"
+            disabled={loading}
+            onClick={() => {
+              handleGoogleSignIn();
+            }}
+          >
+            Register with Google
           </Button>
         </form>
 
         <Typography variant="body2" className="text-center mt-4 text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 underline">
+          <Link to="/login" className="text-blue-600 underline">
             Login
-          </a>
+          </Link>
         </Typography>
       </Paper>
     </div>
