@@ -1,15 +1,49 @@
 import { useQuery } from "@tanstack/react-query";
-import data from "../../fakeData/apartments.json";
 import Slider from "@mui/material/Slider";
 import { useState } from "react";
-import Badge from "@mui/material/Badge";
+import { axiosPublic } from "../../hooks/useAxios";
+import { errorAlert } from "../../utils/alerts";
+import LoadingState from "../../utils/LoadingState";
+import RangeSlider from "../../components/RangeSlider.jsx/RangeSlider";
+import ApartmentCard from "../../components/Cards/ApartmentCard";
 
 const Apartment = () => {
-  const [rangeValue, setRangeValue] = useState(0);
+  const [fromRange, setFromRange] = useState(1215);
+  const [toRange, setToRange] = useState(4900);
+  const [page, setPage] = useState(1);
 
-  const valuetext = (value) => {
-    setRangeValue(value);
-    return value;
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
+    queryKey: ["apartment", "all", page],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/apartment/all", {
+        params: {
+          page: page,
+          limit: 6,
+          fromRange: fromRange,
+          toRange: toRange,
+        },
+      });
+      console.log(res.data);
+      return res.data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const handleFindByRange = () => {
+    if (fromRange > toRange) {
+      errorAlert("From range must be less than to range");
+      return;
+    }
+    refetch();
+  };
+
+  const pages = [];
+  for (let i = 1; i <= data?.totalPages; i++) {
+    pages.push(i);
+  }
+
+  const handleSelect = (apartment) => {
+    console.log(apartment);
   };
 
   return (
@@ -20,73 +54,86 @@ const Apartment = () => {
       <div className="text-center lg:w-6/12 w-11/12 font-semibold items-start mx-auto bg-base-200 rounded-xl lg:p-8 p-4 flex flex-col gap-4">
         <h1 className="text-xl">Lets Find Your Home</h1>
         <div className="w-full">
-          <Slider
-            sx={{ color: "teal" }}
-            aria-label="Temperature"
-            defaultValue={100}
-            getAriaValueText={valuetext}
-            valueLabelDisplay="auto"
-            shiftStep={30}
-            step={100}
-            marks
-            min={100}
-            max={2000}
+          <RangeSlider
+            setFromRange={setFromRange}
+            setToRange={setToRange}
+            fromRange={fromRange}
+            toRange={toRange}
           />
         </div>
-        <div className="flex lg:flex-row flex-col  items-start justify-center  gap-4">
+
+        <div className="flex lg:flex-row flex-col lg:items-center items-start lg:justify-center gap-4">
           <input
-            className="input w-fit"
+            className="border-0 outline-0 cursor-pointer"
+            value={`From: $${fromRange}`}
             readOnly
-            type="text"
-            defaultValue={0}
-            value={`From: $${100}`}
           />
           <input
-            className="input w-fit "
+            className="border-0 outline-0 cursor-pointer"
+            value={`To: $${toRange}`}
             readOnly
-            type="text"
-            defaultValue={0}
-            value={`To: $${rangeValue}`}
           />
-          <button className="btn">Search Home</button>
+          <button className="btn" onClick={handleFindByRange}>
+            {isFetching ? (
+              <div>
+                <span className="loading loading-spinner loading-sm"></span>{" "}
+                Searching...
+              </div>
+            ) : (
+              "Search Home"
+            )}
+          </button>
+          <div>
+            {data?.data && data?.total !== 20 ? (
+              <button className="btn btn-ghost">
+                {" "}
+                Total result found: {data.total}
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
       </div>
 
       {/*  search by range  */}
 
-      <div className="text-center py-8 text-4xl text-white">
+      <div className="text-center py-8 text-4xl text-white lg:pt-20">
         <h1>All Floors</h1>
       </div>
       <div className="w-10/12 mx-auto flex flex-wrap justify-center gap-6 pb-24">
-        {data.map(({ id, floor, block, apartmentNumber, rent }) => (
-          <div className="card bg-base-100 w-96 shadow-xl" key={id}>
-            <figure>
-              <img
-                className="hover:scale-115 duration-500"
-                src="https://picsum.photos/400/250"
-                alt="floor"
-              />
-            </figure>
-            <div className="card-body">
-              <div className="flex flex-wrap gap-2">
-                <button className="btn btn-sm">Floor: {floor}</button>
-                <button className="btn btn-sm">Block: {block}</button>
-                <button className="btn btn-sm">
-                  Apartment: {apartmentNumber}
-                </button>
-                <button className="badge badge-md badge-secondary badge-soft ">
-                  Rent: ${rent}
-                </button>
-              </div>
+        {(isLoading || isFetching) && <LoadingState />}
+        {error && errorAlert(error.message)}
 
-              <div className="card-actions justify-end">
-                <button className="btn  btn-sm bg-teal-900 text-white">
-                  Agreement
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+        {!isLoading &&
+          !isFetching &&
+          !error &&
+          data &&
+          data?.data?.map((apartment) => (
+            <ApartmentCard
+              key={apartment._id}
+              {...apartment}
+              handleSelect={handleSelect}
+            />
+          ))}
+      </div>
+
+      <div className="flex justify-center items-center lg:pb-20">
+        <div className="flex gap-4">
+          {pages.map((num) => (
+            <button
+              key={num}
+              className={`btn ${
+                data.currentPage === num ? "btn-warning" : "btn-active"
+              }`}
+              onClick={() => {
+                setPage(num);
+              }}
+            >
+              Page {num}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

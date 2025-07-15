@@ -2,6 +2,7 @@
 import { Link } from "react-router";
 import { FiHome, FiLogIn } from "react-icons/fi";
 import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
+import AccountMenu from "./AccountMenu";
 
 const CommonNavLinks = ({ user, onLinkClick, handleLogout }) => {
   return (
@@ -18,21 +19,12 @@ const CommonNavLinks = ({ user, onLinkClick, handleLogout }) => {
           Apartment
         </Link>
       </li>
-      <li onClick={onLinkClick}>
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <RiDashboardLine />
-          Dashboard
-        </Link>
-      </li>
 
       <li onClick={onLinkClick}>
         {user ? (
-          <button onClick={handleLogout} className="flex items-center gap-2">
-            <FiLogIn />
-            Logout
-          </button>
+          <AccountMenu user={user} />
         ) : (
-          <Link to="/login" className="flex items-center gap-2">
+          <Link to="/login">
             <FiLogIn />
             Login
           </Link>

@@ -9,6 +9,7 @@ import { errorAlert, successAlert } from "../../utils/alerts";
 import { Link, useNavigate } from "react-router";
 import auth from "../../firebase.init";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { axiosPublic } from "../../hooks/useAxios";
 
 const Register = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -46,11 +47,26 @@ const Register = () => {
         updateUser(userData)
           .then(() => {
             console.log(userCredential.user);
-            setUser(userCredential.user);
-            successAlert("Account created successfully!");
-            setLoading(false);
-            form.reset();
-            navigate("/");
+
+            axiosPublic
+              .post("/user/create", {
+                email: userCredential.user.email,
+                name: userCredential.user.displayName,
+                photoURL: userCredential.user.photoURL,
+                role: "user",
+              })
+              .then(() => {
+                setUser(userCredential.user);
+                successAlert("Account created successfully!");
+                setLoading(false);
+                navigate("/");
+                form.reset();
+              })
+              .catch((error) => {
+                errorAlert(error.message);
+                console.log(error);
+                setLoading(false);
+              });
           })
           .catch((err) => {
             errorAlert(err.message);

@@ -31,14 +31,15 @@ const AuthProvider = ({ children }) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  const updateUser = ({ photoURL }) => {
+  const updateUser = ({ name, photoURL }) => {
     return updateProfile(auth.currentUser, {
+      displayName: name,
       photoURL,
     });
   };
 
-  const loginWithEmailAndPassword = ({email, password}) => {
-    return signInWithEmailAndPassword(auth, email, password)
+  const loginWithEmailAndPassword = ({ email, password }) => {
+    return signInWithEmailAndPassword(auth, email, password);
   };
 
   const userInfo = {
@@ -49,7 +50,6 @@ const AuthProvider = ({ children }) => {
     updateUser,
 
     loginWithEmailAndPassword,
-
   };
 
   return (

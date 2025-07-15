@@ -55,7 +55,7 @@ const Navbar = () => {
       errorAlert(error);
     }
   };
-  console.log(user)
+  // console.log(user)
 
   const LgMenu = () => (
     <div
