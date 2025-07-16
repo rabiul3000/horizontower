@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -14,35 +14,35 @@ const SidebarAdmin = () => {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="profile">
+        <ListItemButton component={NavLink} to="profile">
           <ListItemIcon><FaUserShield size={20} /></ListItemIcon>
           <ListItemText primary="Admin Profile" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="manage-members">
+        <ListItemButton component={NavLink} to="manage-members">
           <ListItemIcon><MdGroups size={20} /></ListItemIcon>
           <ListItemText primary="Manage Members" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="make-announcement">
+        <ListItemButton component={NavLink} to="make-announcement">
           <ListItemIcon><MdAnnouncement size={20} /></ListItemIcon>
           <ListItemText primary="Make Announcement" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="agreement-requests">
+        <ListItemButton component={NavLink} to="agreement-requests">
           <ListItemIcon><RiFileList2Line size={20} /></ListItemIcon>
           <ListItemText primary="Agreement Requests" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="manage-coupons">
+        <ListItemButton component={NavLink} to="manage-coupons">
           <ListItemIcon><RiCoupon2Line size={20} /></ListItemIcon>
           <ListItemText primary="Manage Coupons" />
         </ListItemButton>

@@ -20,12 +20,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { BiExit } from "react-icons/bi";
+import { useQuery } from "@tanstack/react-query";
+import { axiosSecure } from "../hooks/useAxios";
+import { errorAlert } from "../utils/alerts";
+import LoadingState from "../utils/LoadingState";
 
 const drawerWidth = 240;
 
 function DashBoardLayout(props) {
-  const { user } = useUser();
-  const { role } = user;
+  const { user, userLoading, setUserRole, userRole } = useUser();
+
+  const role = "user";
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -45,13 +50,33 @@ function DashBoardLayout(props) {
     }
   };
 
+  const { error, isLoading } = useQuery({
+    queryKey: ["user", user],
+    queryFn: async () => {
+      const response = await axiosSecure.get(`/user/${user.email}`);
+      setUserRole(response.data.role);
+      return response.data;
+    },
+  });
+
+  if (userLoading) {
+    return <LoadingState />;
+  }
+
+  if (isLoading) {
+    return <LoadingState />;
+  }
+  if (error) {
+    return errorAlert(error.message);
+  }
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
-      {role === "user" && <SidebarUser />}
-      {role === "member" && <SidebarMember />}
-      {role === "admin" && <SidebarAdmin />}
+      {userRole === "user" && <SidebarUser />}
+      {userRole === "member" && <SidebarMember />}
+      {userRole === "admin" && <SidebarAdmin />}
       <Divider />
 
       <ListItem disablePadding>

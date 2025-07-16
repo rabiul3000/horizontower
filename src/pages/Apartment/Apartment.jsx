@@ -2,15 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import Slider from "@mui/material/Slider";
 import { useState } from "react";
 import { axiosPublic } from "../../hooks/useAxios";
-import { errorAlert } from "../../utils/alerts";
+import { confirmAlert, errorAlert, successAlert } from "../../utils/alerts";
 import LoadingState from "../../utils/LoadingState";
 import RangeSlider from "../../components/RangeSlider.jsx/RangeSlider";
 import ApartmentCard from "../../components/Cards/ApartmentCard";
+import useUser from "../../hooks/useUser";
+import { useNavigate } from "react-router";
 
 const Apartment = () => {
   const [fromRange, setFromRange] = useState(1215);
   const [toRange, setToRange] = useState(4900);
   const [page, setPage] = useState(1);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["apartment", "all", page],
@@ -42,8 +46,32 @@ const Apartment = () => {
     pages.push(i);
   }
 
-  const handleSelect = (apartment) => {
-    console.log(apartment);
+  const handleSelectedApartment = async (apartment) => {
+    try {
+      if (!user) {
+        navigate("/login");
+      }
+
+      const isConfirmed = await confirmAlert(
+        "Do You Really Want To Book This Apartment?",
+      );
+
+      if (isConfirmed) {
+        const res = await axiosPublic.post("/agreement/create", {
+          apartment,
+          user,
+        });
+        if (res.status === 201) {
+          successAlert("Booking Successful");
+          return;
+        }
+      } else {
+        return;
+      }
+    } catch (error) {
+      if (error.status === 409) errorAlert("You already have a booking");
+      else errorAlert(error.message);
+    }
   };
 
   return (
@@ -110,10 +138,11 @@ const Apartment = () => {
           !error &&
           data &&
           data?.data?.map((apartment) => (
+            // apartment cards
             <ApartmentCard
               key={apartment._id}
               {...apartment}
-              handleSelect={handleSelect}
+              handleSelectedApartment={handleSelectedApartment}
             />
           ))}
       </div>

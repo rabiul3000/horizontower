@@ -11,11 +11,11 @@ import {
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [userLoading, setUserLoading] = useState(false);
+  const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    setUserLoading(true);
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
@@ -48,7 +48,8 @@ const AuthProvider = ({ children }) => {
     userLoading,
     emailSignIn,
     updateUser,
-
+    setUserRole,
+    userRole,
     loginWithEmailAndPassword,
   };
 

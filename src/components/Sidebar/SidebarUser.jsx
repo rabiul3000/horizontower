@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -12,7 +12,7 @@ const SidebarUser = () => {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="profile">
+        <ListItemButton component={NavLink} to="/dashboard" end>
           <ListItemIcon>
             <FaUserCircle size={20} />
           </ListItemIcon>
@@ -20,7 +20,7 @@ const SidebarUser = () => {
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
-        <ListItemButton component={Link} to="announcement">
+        <ListItemButton component={NavLink} to="/dashboard/announcements" end >
           <ListItemIcon>
             <MdAnnouncement size={20} />
           </ListItemIcon>

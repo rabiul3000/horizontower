@@ -10,3 +10,7 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+
+a.active {
+  background-color: gainsboro;
+}

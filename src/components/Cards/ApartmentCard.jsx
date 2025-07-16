@@ -1,4 +1,4 @@
-import React from "react";
+
 
 const ApartmentCard = ({
   _id,
@@ -7,7 +7,7 @@ const ApartmentCard = ({
   block,
   apartmentNo,
   rent,
-  handleSelect,
+  handleSelectedApartment,
 }) => {
   return (
     <div className="card bg-base-100 w-96 shadow-xl">
@@ -32,7 +32,7 @@ const ApartmentCard = ({
         <div className="card-actions justify-end">
           <button
             className="btn  btn-sm bg-teal-900 text-white"
-            onClick={() => handleSelect({
+            onClick={() => handleSelectedApartment({
               _id,
               image,
               floor,
