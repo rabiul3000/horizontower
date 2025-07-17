@@ -10,15 +10,25 @@ export const axiosPublic = axios.create({
 export const axiosSecure = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
+  query: {
+    email: auth?.currentUser?.email,
+  },
 });
 
 // Async token injection
 axiosSecure.interceptors.request.use(
   async (config) => {
     const user = auth.currentUser;
+    const email = auth.currentUser.email;
     if (user) {
-      const token = await user.getIdToken();
-      config.headers.Authorization = `Bearer ${token}`;
+      if (email) {
+        const token = await user.getIdToken();
+        config.headers.Authorization = `Bearer ${token}`;
+        config.params = {
+          ...config.params,
+          email,
+        };
+      }
     }
 
     return config;

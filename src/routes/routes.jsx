@@ -8,8 +8,11 @@ import MemberDashboard from "../pages/dashboard/member/MemberDashboard";
 import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
 import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
-import MyProfile from "../pages/MyProfile/MyProfile";
 import Announcements from "../pages/Announcements/Announcements";
+import ProtectedProfileRoute from "../pages/dashboard/controlRoutes/ProtectedProfileRoute";
+import UserProfile from "../pages/dashboard/user/UserProfile";
+import MakeAnnouncement from "../pages/dashboard/admin/MakeAnnouncement";
+import AdminRoutes from "../pages/dashboard/controlRoutes/AdminRoutes";
 
 const router = createBrowserRouter([
   {
@@ -26,11 +29,13 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashBoardLayout />,
     children: [
-      { index: true, element: <MyProfile /> },
+      { index: true, element: <ProtectedProfileRoute><UserProfile /></ProtectedProfileRoute> },
       { path: "announcements", element: <Announcements /> },
       { path: "user", element: <UserDashboard /> },
       { path: "member", element: <MemberDashboard /> },
-      { path: "admin", element: <AdminDashboard /> },
+
+      
+      { path: "make_announcement", element:<AdminRoutes><MakeAnnouncement /></AdminRoutes> },
     ],
   },
   {

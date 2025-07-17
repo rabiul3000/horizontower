@@ -53,7 +53,7 @@ const Apartment = () => {
       }
 
       const isConfirmed = await confirmAlert(
-        "Do You Really Want To Book This Apartment?",
+        "Do You Really Want To Book This Apartment?"
       );
 
       if (isConfirmed) {
@@ -61,6 +61,7 @@ const Apartment = () => {
           apartment,
           user,
         });
+        console.log(res);
         if (res.status === 201) {
           successAlert("Booking Successful");
           return;
@@ -70,7 +71,10 @@ const Apartment = () => {
       }
     } catch (error) {
       if (error.status === 409) errorAlert("You already have a booking");
-      else errorAlert(error.message);
+      else {
+        console.log(error);
+        errorAlert(error.response.data.message);
+      }
     }
   };
 

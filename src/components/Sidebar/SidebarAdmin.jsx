@@ -14,35 +14,42 @@ const SidebarAdmin = () => {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="profile">
+        <ListItemButton component={NavLink} to="/dashboard" end>
           <ListItemIcon><FaUserShield size={20} /></ListItemIcon>
           <ListItemText primary="Admin Profile" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="manage-members">
+        <ListItemButton component={NavLink} to="manage-members" end>
           <ListItemIcon><MdGroups size={20} /></ListItemIcon>
           <ListItemText primary="Manage Members" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="make-announcement">
+        <ListItemButton component={NavLink} to="/dashboard/announcements" end>
+          <ListItemIcon><MdAnnouncement size={20} /></ListItemIcon>
+          <ListItemText primary="All Announcements" />
+        </ListItemButton>
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemButton component={NavLink} to="/dashboard/make_announcement" end>
           <ListItemIcon><MdAnnouncement size={20} /></ListItemIcon>
           <ListItemText primary="Make Announcement" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="agreement-requests">
+        <ListItemButton component={NavLink} to="agreement-requests" end>
           <ListItemIcon><RiFileList2Line size={20} /></ListItemIcon>
           <ListItemText primary="Agreement Requests" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="manage-coupons">
+        <ListItemButton component={NavLink} to="manage-coupons" end>
           <ListItemIcon><RiCoupon2Line size={20} /></ListItemIcon>
           <ListItemText primary="Manage Coupons" />
         </ListItemButton>

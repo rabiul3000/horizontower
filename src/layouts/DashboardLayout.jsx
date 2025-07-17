@@ -53,7 +53,7 @@ function DashBoardLayout(props) {
   const { error, isLoading } = useQuery({
     queryKey: ["user", user],
     queryFn: async () => {
-      const response = await axiosSecure.get(`/user/${user.email}`);
+      const response = await axiosSecure.get(`/user`);
       setUserRole(response.data.role);
       return response.data;
     },

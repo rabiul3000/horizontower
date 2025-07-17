@@ -5,66 +5,29 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import useAxios from "../../hooks/useAxios";
 import LoadingState from "../../utils/LoadingState";
 import { errorAlert } from "../../utils/alerts";
+import { axiosSecure } from "../../hooks/useAxios";
 
 const Announcements = () => {
-  const { axiosPublic } = useAxios();
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  //   const { data = [], isLoading, error } = useQuery(
-  //     ["announcements"],
-  //     async () => {
-  //       const res = await axiosPublic.get("/announcements");
-  //       return res.data;
-  //     }
-  //   );
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["announcements", "all"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/announcement/all");
+      console.log(res.data);
+      return res.data;
+    },
+  });
 
-  const data = [
-    {
-      _id: "1",
-      title: "Maintenance Update",
-      message: "Elevator repairs on Floor 2. Expected completion by July 16.",
-      postedBy: "Owner",
-      createdAt: "2025-07-13T12:00:00Z",
-    },
-    {
-      _id: "2",
-      title: "Water Supply Disruption",
-      message:
-        "Water supply will be unavailable on July 18 from 10 AM to 4 PM due to pipeline maintenance.",
-      postedBy: "Owner",
-      createdAt: "2025-07-14T08:30:00Z",
-    },
-    {
-      _id: "3",
-      title: "Community Meeting",
-      message:
-        "All residents are invited to the monthly community meeting in Block A Hall on July 20 at 6 PM.",
-      postedBy: "Admin",
-      createdAt: "2025-07-10T16:00:00Z",
-    },
-    {
-      _id: "4",
-      title: "New Parking Rules",
-      message:
-        "Please review the updated parking rules sent to your email. Changes are effective from August 1.",
-      postedBy: "Owner",
-      createdAt: "2025-07-12T09:00:00Z",
-    },
-    {
-      _id: "5",
-      title: "Fire Drill Announcement",
-      message:
-        "A mandatory fire drill will be conducted on July 22 at 3 PM. Participation is required.",
-      postedBy: "Management",
-      createdAt: "2025-07-15T10:45:00Z",
-    },
-  ];
-  const isLoading = false;
-  const error = false;
+  if (isLoading) return <LoadingState />;
+  if (error) return errorAlert("Failed to load announcements");
 
   const isRecent = (createdAt) => dayjs().diff(dayjs(createdAt), "day") <= 3;
 
@@ -74,9 +37,6 @@ const Announcements = () => {
     if (endDate && created.isAfter(endDate, "day")) return false;
     return true;
   });
-
-  if (isLoading) return <LoadingState />;
-  if (error) return errorAlert("Failed to load announcements");
 
   return (
     <div className="min-h-screen bg-base-200 py-12 px-4">
@@ -134,7 +94,7 @@ const Announcements = () => {
                       <span className="badge badge-success badge-sm">NEW</span>
                     )}
                   </h2>
-                  <p className="text-gray-600 mt-2">{a.message}</p>
+                  <p className="text-gray-600 mt-2">{a.description}</p>
                   <div className="mt-4 flex justify-between text-sm text-gray-500">
                     <span className="flex items-center gap-1">
                       <FaUserShield /> {a.postedBy || "Owner"}
