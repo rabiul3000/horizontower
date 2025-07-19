@@ -13,6 +13,10 @@ import ProtectedProfileRoute from "../pages/dashboard/controlRoutes/ProtectedPro
 import UserProfile from "../pages/dashboard/user/UserProfile";
 import MakeAnnouncement from "../pages/dashboard/admin/MakeAnnouncement";
 import AdminRoutes from "../pages/dashboard/controlRoutes/AdminRoutes";
+import AgreementRequests from "../pages/dashboard/admin/AgreementRequests";
+import ManageCoupons from "../pages/dashboard/admin/ManageCoupons";
+import MakePayment from "../pages/dashboard/member/MakePayment";
+import MemberRoutes from "../pages/dashboard/controlRoutes/MemberRoutes";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +40,10 @@ const router = createBrowserRouter([
 
       
       { path: "make_announcement", element:<AdminRoutes><MakeAnnouncement /></AdminRoutes> },
+      { path: "agreement_requests", element:<AdminRoutes><AgreementRequests /></AdminRoutes> },
+      { path: "manage_coupons", element:<AdminRoutes><ManageCoupons /></AdminRoutes> },
+
+      { path: "make_payment", element:<MemberRoutes><MakePayment /></MemberRoutes> },
     ],
   },
   {

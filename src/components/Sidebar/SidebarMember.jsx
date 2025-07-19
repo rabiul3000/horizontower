@@ -14,7 +14,7 @@ const SidebarMember = () => {
   return (
     <List>
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="profile">
+        <ListItemButton component={NavLink} to="/dashboard" end>
           <ListItemIcon>
             <FaUserCircle size={20} />
           </ListItemIcon>
@@ -23,7 +23,7 @@ const SidebarMember = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="make-payment">
+        <ListItemButton component={NavLink} to="/dashboard/make_payment" end>
           <ListItemIcon>
             <MdPayment size={20} />
           </ListItemIcon>
@@ -32,7 +32,7 @@ const SidebarMember = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="payment-history">
+        <ListItemButton component={NavLink} to="payment-history" end>
           <ListItemIcon>
             <BsClockHistory size={20} />
           </ListItemIcon>
@@ -41,7 +41,7 @@ const SidebarMember = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="announcement">
+        <ListItemButton component={NavLink} to="announcement" end>
           <ListItemIcon>
             <MdAnnouncement size={20} />
           </ListItemIcon>

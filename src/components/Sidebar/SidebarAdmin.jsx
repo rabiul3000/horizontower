@@ -42,14 +42,14 @@ const SidebarAdmin = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="agreement-requests" end>
+        <ListItemButton component={NavLink} to="/dashboard/agreement_requests" end>
           <ListItemIcon><RiFileList2Line size={20} /></ListItemIcon>
           <ListItemText primary="Agreement Requests" />
         </ListItemButton>
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="manage-coupons" end>
+        <ListItemButton component={NavLink} to="/dashboard/manage_coupons" end>
           <ListItemIcon><RiCoupon2Line size={20} /></ListItemIcon>
           <ListItemText primary="Manage Coupons" />
         </ListItemButton>

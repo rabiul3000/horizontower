@@ -1,9 +1,28 @@
 import React from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "motion/react";
+import { axiosPublic } from "../../hooks/useAxios";
+import { useQuery } from "@tanstack/react-query";
+import LoadingState from "../../utils/LoadingState";
+import { errorAlert } from "../../utils/alerts";
+import CouponCard from "../Cards/CouponCard";
 
 const Coupons = () => {
-  const offs = [15, 10, 5, 20, 25, 30];
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["coupon", "all"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/coupon/all");
+      console.log(res.data);
+      return res.data;
+    },
+    refetchOnWindowFocus: false,
+  });
+
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
     visible: (i = 0) => ({
@@ -12,39 +31,12 @@ const Coupons = () => {
       transition: { delay: i * 0.2, duration: 0.6 },
     }),
   };
-  const Coupon = ({ off }) => (
-    <div className="flex flex-col gap-4 shadow-teal-300 shadow-2xl bg-teal-900 text-white rounded-lg overflow-hidden">
-      <div className="p-4 flex flex-col sm:flex-row gap-4 items-center sm:items-center">
-        {/* Left Box */}
-        <div className="border font-bold w-24 h-24 sm:w-32 sm:h-32 border-dashed flex flex-col items-center justify-center">
-          <h1 className="text-2xl sm:text-4xl">${off}</h1>
-          <h1 className="text-2xl sm:text-4xl">Off</h1>
-        </div>
+ 
 
-        {/* Middle Text */}
-        <div className="flex-1 flex flex-col sm:justify-center gap-1">
-          <h1 className="text-lg sm:text-2xl font-semibold">
-            Get ${off} Off on your Next Purchase
-          </h1>
-          <p className="text-sm flex items-center gap-1 text-green-400">
-            <FaCheckCircle className="text-green-400" />
-            Code Verified
-          </p>
-        </div>
-
-        {/* Right Button */}
-        <div className="w-full sm:w-auto flex justify-start sm:justify-end items-center">
-          <button className="btn btn-outline w-full sm:w-auto">
-            Add Coupon
-          </button>
-        </div>
-      </div>
-
-      <div className="px-4 py-2 bg-teal-700 text-sm sm:text-base">
-        <p>Limited Time Offer. Grab Now!</p>
-      </div>
-    </div>
-  );
+  if (isLoading) return <LoadingState />;
+  if (error) return errorAlert("Coupons fetching failed");
+  if (!data.length)
+    return <h1 className="text-center text-3xl"> No Coupons found</h1>;
 
   return (
     <motion.div
@@ -60,8 +52,8 @@ const Coupons = () => {
         </button>
       </h1>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {offs.map((off, index) => (
-          <Coupon key={index} off={off} />
+        {data.map((coupon) => (
+          <CouponCard key={coupon._id} {...coupon} />
         ))}
       </div>
     </motion.div>

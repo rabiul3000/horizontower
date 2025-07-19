@@ -121,7 +121,13 @@ const MakeAnnouncement = () => {
             ":hover": { backgroundColor: "#115e59" },
           }}
         >
-          {loading ? <div>Publishing <span className="loading loading-ring"></span></div>  : "Publish"}
+          {loading ? (
+            <div>
+              Publishing <span className="loading loading-ring"></span>
+            </div>
+          ) : (
+            "Publish"
+          )}
         </Button>
       </form>
     </div>

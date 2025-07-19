@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import Slider from "@mui/material/Slider";
 import { useState } from "react";
-import { axiosPublic } from "../../hooks/useAxios";
+import { axiosPublic, axiosSecure } from "../../hooks/useAxios";
 import { confirmAlert, errorAlert, successAlert } from "../../utils/alerts";
 import LoadingState from "../../utils/LoadingState";
 import RangeSlider from "../../components/RangeSlider.jsx/RangeSlider";
 import ApartmentCard from "../../components/Cards/ApartmentCard";
 import useUser from "../../hooks/useUser";
 import { useNavigate } from "react-router";
+import LoadingModal from "../../utils/LoadingModal";
 
 const Apartment = () => {
   const [fromRange, setFromRange] = useState(1215);
@@ -15,6 +16,8 @@ const Apartment = () => {
   const [page, setPage] = useState(1);
   const { user } = useUser();
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["apartment", "all", page],
@@ -56,8 +59,10 @@ const Apartment = () => {
         "Do You Really Want To Book This Apartment?"
       );
 
+      setLoading(true);
+
       if (isConfirmed) {
-        const res = await axiosPublic.post("/agreement/create", {
+        const res = await axiosSecure.post("/agreement/create", {
           apartment,
           user,
         });
@@ -75,6 +80,8 @@ const Apartment = () => {
         console.log(error);
         errorAlert(error.response.data.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -133,6 +140,9 @@ const Apartment = () => {
       <div className="text-center py-8 text-4xl text-white lg:pt-20">
         <h1>All Floors</h1>
       </div>
+
+      <LoadingModal loading={loading} />
+
       <div className="w-10/12 mx-auto flex flex-wrap justify-center gap-6 pb-24">
         {(isLoading || isFetching) && <LoadingState />}
         {error && errorAlert(error.message)}

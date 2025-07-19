@@ -12,7 +12,7 @@ import useUser from "../../../hooks/useUser";
 import useAxios from "../../../hooks/useAxios";
 
 const AdminProfile = () => {
-  const { user } = useUser();
+  const { user, userRole } = useUser();
   const { axiosSecure } = useAxios();
 
   // React Query logic
@@ -81,7 +81,7 @@ const AdminProfile = () => {
             {user?.displayName || "Admin"}
             <span className="badge bg-teal-500 text-white text-xs font-medium flex items-center gap-1">
               <FaStar className="text-white text-sm" />
-              Admin
+              {userRole}
             </span>
           </h2>
           <p className="text-sm text-neutral">{user?.email}</p>
