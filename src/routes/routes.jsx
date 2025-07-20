@@ -17,6 +17,7 @@ import AgreementRequests from "../pages/dashboard/admin/AgreementRequests";
 import ManageCoupons from "../pages/dashboard/admin/ManageCoupons";
 import MakePayment from "../pages/dashboard/member/MakePayment";
 import MemberRoutes from "../pages/dashboard/controlRoutes/MemberRoutes";
+import Payment from "../pages/dashboard/member/Payment";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
       { path: "manage_coupons", element:<AdminRoutes><ManageCoupons /></AdminRoutes> },
 
       { path: "make_payment", element:<MemberRoutes><MakePayment /></MemberRoutes> },
+      { path: "payment", element:<MemberRoutes><Payment /></MemberRoutes> },
     ],
   },
   {

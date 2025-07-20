@@ -7,6 +7,7 @@ import useUser from "../../../hooks/useUser";
 import { motion } from "framer-motion";
 import { TextField, Button } from "@mui/material";
 import { axiosSecure } from "../../../hooks/useAxios";
+import { useNavigate } from "react-router";
 
 const MakePayment = () => {
   const { user, userLoading } = useUser();
@@ -15,6 +16,9 @@ const MakePayment = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discountedRent, setDiscountedRent] = useState(null);
   const [couponStatus, setCouponStatus] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [coupon, setCoupon] = useState(null);
+  const navigate = useNavigate();
 
   const {
     data: apartment,
@@ -33,15 +37,17 @@ const MakePayment = () => {
   const handleApplyCoupon = async () => {
     if (!couponCode) return errorAlert("Enter a coupon code first.");
     try {
+      setCouponLoading(true);
       const { data } = await axiosSecure.post("/coupon/validate/", {
         couponCode,
       });
-      const discount = data;
+      setCoupon(data);
 
-      if (discount) {
-        const newRent = apartment?.rent - (apartment?.rent * discount) / 100;
+      if (data) {
+        const newRent =
+          apartment?.rent - (apartment?.rent * data?.discount) / 100;
         setDiscountedRent(Math.round(newRent));
-        setCouponStatus(`Coupon applied: ${discount}% off`);
+        setCouponStatus(`Coupon applied: ${data?.discount}% off`);
         successAlert("Coupon applied successfully!");
       } else {
         setCouponStatus("Invalid coupon.");
@@ -51,33 +57,36 @@ const MakePayment = () => {
       console.error(err);
       errorAlert(err.response.data);
       setCouponStatus(err.response.data);
+    } finally {
+      setCouponLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!selectedMonth) return errorAlert("Please select a month.");
-    setLoading(true);
-
     try {
-      const res = await axiosSecure.post("/payment", {
-        email: apartment?.email,
-        floor: apartment?.floor,
-        block: apartment?.block,
-        apartmentNo: apartment?.apartmentNo,
-        rent: discountedRent || apartment?.rent,
-        month: selectedMonth,
-        coupon: couponCode || null,
-      });
-
-      if (res.status === 201) {
-        successAlert("Payment submitted successfully.");
-        setCouponCode("");
-        setCouponStatus("");
-        setDiscountedRent(null);
-      } else {
-        errorAlert("Payment failed. Try again.");
+      e.preventDefault();
+      setLoading(true);
+      if (!selectedMonth) {
+        return errorAlert("Please select the month.");
       }
+
+      // Navigate to payment page with all relevant info
+      navigate("/dashboard/payment", {
+        state: {
+          name: user.displayName,
+          email: user.email,
+          floor: apartment.floor,
+          block: apartment.block,
+          apartmentNo: apartment.apartmentNo,
+          apartmentId: apartment._id,
+          rent: apartment.rent,
+          month: selectedMonth,
+          year: new Date().getFullYear(),
+          coupon: coupon?.code || null,
+          discount: coupon?.discount || 0,
+          finalAmount: discountedRent || apartment?.rent,
+        },
+      });
     } catch (err) {
       errorAlert(err.message);
     } finally {
@@ -87,6 +96,9 @@ const MakePayment = () => {
 
   if (isLoading || userLoading) return <LoadingState />;
   if (error) return errorAlert("Failed to load apartment info");
+
+  const time = "2025-07-19T11:36:42.024+00:00";
+
 
   return (
     <motion.div
@@ -172,20 +184,59 @@ const MakePayment = () => {
               onChange={(e) => setCouponCode(e.target.value)}
               className="w-full"
             />
-            <Button variant="outlined" onClick={handleApplyCoupon}>
-              Apply
+            <Button
+              variant="outlined"
+              onClick={handleApplyCoupon}
+              disabled={couponLoading}
+            >
+              {couponLoading ? (
+                <span className="loading loading-sm loading-dots"></span>
+              ) : (
+                "Apply"
+              )}
             </Button>
           </div>
           {couponStatus && (
             <p className="text-sm text-info text-center">{couponStatus}</p>
           )}
 
+          {/* bill summery start */}
+
+          {selectedMonth && apartment?.rent && (
+            <div className="bg-base-200 p-4 rounded-lg shadow-md space-y-2 mt-4">
+              <h3 className="text-lg font-semibold text-center text-primary">
+                Payment Summary
+              </h3>
+              <div className="flex justify-between">
+                <span>Original Rent:</span>
+                <span>${apartment?.rent}</span>
+              </div>
+              {discountedRent && discountedRent !== apartment.rent && (
+                <div className="flex justify-between text-green-600 font-medium">
+                  <span>Coupon Discount Applied: </span>
+                  <span>- ${apartment.rent - discountedRent}</span>
+                </div>
+              )}
+              <div className="divider my-1"></div>
+              <div className="flex justify-between text-lg font-bold">
+                <span>Total Payable:</span>
+                <span>${discountedRent || apartment?.rent}</span>
+              </div>
+              <div className="flex justify-between text-sm text-neutral">
+                <span>Paying for month:</span>
+                <span>{selectedMonth}</span>
+              </div>
+            </div>
+          )}
+
+          {/* bill summery end */}
+
           <button
             className="btn btn-primary w-full mt-4"
             type="submit"
             disabled={loading}
           >
-            {loading ? "Processing..." : "Pay Now"}
+            {loading ? "Processing..." : "Proceed to Payment With Stripe"}
           </button>
         </form>
       </div>
