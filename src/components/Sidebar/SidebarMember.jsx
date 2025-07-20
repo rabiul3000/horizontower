@@ -32,7 +32,7 @@ const SidebarMember = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="payment-history" end>
+        <ListItemButton component={NavLink} to="payment_history" end>
           <ListItemIcon>
             <BsClockHistory size={20} />
           </ListItemIcon>
@@ -41,7 +41,7 @@ const SidebarMember = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="announcement" end>
+          <ListItemButton component={NavLink} to="/dashboard/announcements" end>
           <ListItemIcon>
             <MdAnnouncement size={20} />
           </ListItemIcon>

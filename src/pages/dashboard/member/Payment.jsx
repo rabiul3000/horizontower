@@ -11,8 +11,9 @@ import { axiosSecure } from "../../../hooks/useAxios";
 import { errorAlert, successAlert } from "../../../utils/alerts";
 import { Button, CircularProgress } from "@mui/material";
 import { BsStripe } from "react-icons/bs";
+import { VITE_STRIPE_PK } from "../../../api/api";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
+const stripePromise = loadStripe(VITE_STRIPE_PK);
 
 const CheckoutForm = ({ paymentData }) => {
   const stripe = useStripe();
@@ -61,14 +62,19 @@ const CheckoutForm = ({ paymentData }) => {
       errorAlert(error.message);
     } else if (paymentIntent.status === "succeeded") {
       successAlert("Payment successful!");
-      await axiosSecure.post("/payment/save", {
-        ...paymentData,
-        transactionId: paymentIntent.id,
-      });
-      navigate("/dashboard/payment_history");
+      try {
+        await axiosSecure.post("/payment/save", {
+          ...paymentData,
+          transactionId: paymentIntent.id,
+        });
+        navigate("/dashboard/payment_history");
+      } catch (err) {
+        errorAlert(err?.response?.data || "Something went wrong.");
+        navigate("/dashboard/make_payment");
+      } finally {
+        setLoading(false);
+      }
     }
-
-    setLoading(false);
   };
 
   return (

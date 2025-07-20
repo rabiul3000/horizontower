@@ -6,14 +6,14 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 
-import { MdPersonAdd, MdSettings, MdLogout } from "react-icons/md"; // React-icons replacement
+import { MdLogout } from "react-icons/md"; // React-icons replacement
 import { RiDashboardLine } from "react-icons/ri";
 import { signOut } from "firebase/auth";
 import auth from "../../firebase.init";
 import { useNavigate } from "react-router";
+import { Typography } from "@mui/material";
 
 export default function AccountMenu({ user }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -99,7 +99,7 @@ export default function AccountMenu({ user }) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} disabled>
-          <Avatar />
+          <Avatar src={user.photoURL} />
           {user.displayName}
         </MenuItem>
 

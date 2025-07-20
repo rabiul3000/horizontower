@@ -132,6 +132,9 @@ const Navbar = () => {
                   document.getElementById("my-drawer").checked = false;
                 }}
               />
+
+           
+              
               <li>
                 <button
                   className="btn w-full flex items-center justify-center gap-2"
