@@ -7,7 +7,7 @@ Welcome to **HomeHorizon**, complete and production-ready modern and responsive 
 ## 🔗 Live Links
 
 - 🚀 **Live Site**: [https://horizontower-3c51a.web.app](https://horizontower-3c51a.web.app)
-- 🗂️ **Frontend Repo**: [https://github.com/Programming-Hero-Web-Course4/](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-rabiul3000.git)
+- 🗂️ **Frontend Repo**: [https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-rabiul3000.git](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-rabiul3000.git)
 
 ---
 
