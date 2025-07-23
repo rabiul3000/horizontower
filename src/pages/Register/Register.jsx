@@ -14,10 +14,10 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import InputFileUpload from "../../utils/InputFileUpload";
 import PasswordInput from "../../utils/PasswordInput";
 import saveImageToDB from "../../services/saveImageToDB";
-import { AuthContext } from "../../context/AuthContext";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import { axiosPublic } from "../../hooks/useAxios";
 import auth from "../../firebase.init";
+import { AuthContext } from "../../context/AuthContext";
 
 const Register = () => {
   const [imageFile, setImageFile] = useState(null);

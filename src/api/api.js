@@ -10,5 +10,5 @@ export const FIREBASE_CONFIG = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL
 export const VITE_STRIPE_PK = import.meta.env.VITE_STRIPE_PK;
