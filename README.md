@@ -1,4 +1,4 @@
-# 🏢 HomeHorizon – Building Management System (Frontend)
+# 🏢 HomeHorizon – Building Management System
 
 Welcome to **HomeHorizon**, complete and production-ready modern and responsive full-stack **Building Management System** designed for residential apartment complexes. This is the **client-side (frontend)** application of the project, built using React, TailwindCSS, DaisyUI, Material UI, and Firebase for seamless and secure user interaction.
 
@@ -7,7 +7,7 @@ Welcome to **HomeHorizon**, complete and production-ready modern and responsive 
 ## 🔗 Live Links
 
 - 🚀 **Live Site**: [https://horizontower-3c51a.web.app](https://horizontower-3c51a.web.app)
-- 🗂️ **Frontend Repo**: [GitHub Repository](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-rabiul3000.git)
+- 🗂️ **Frontend Repo**: [https://github.com/Programming-Hero-Web-Course4/](https://github.com/Programming-Hero-Web-Course4/b11a12-client-side-rabiul3000.git)
 
 ---
 
