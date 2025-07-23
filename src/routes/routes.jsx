@@ -3,9 +3,6 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home/Home";
 import Apartment from "../pages/Apartment/Apartment";
 import DashBoardLayout from "../layouts/DashboardLayout";
-import UserDashboard from "../pages/dashboard/user/UserDashboard";
-import MemberDashboard from "../pages/dashboard/member/MemberDashboard";
-import AdminDashboard from "../pages/dashboard/admin/AdminDashboard";
 import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
 import Announcements from "../pages/Announcements/Announcements";
@@ -19,6 +16,8 @@ import MakePayment from "../pages/dashboard/member/MakePayment";
 import MemberRoutes from "../pages/dashboard/controlRoutes/MemberRoutes";
 import Payment from "../pages/dashboard/member/Payment";
 import PaymentHistory from "../pages/dashboard/member/PaymentHistory";
+import ManageMembers from "../pages/dashboard/admin/ManageMembers";
+import NotFound from "../pages/NotFound/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -35,24 +34,50 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashBoardLayout />,
     children: [
-      { index: true, element: <ProtectedProfileRoute><UserProfile /></ProtectedProfileRoute> },
+      {
+        index: true,
+        element: <ProtectedProfileRoute><UserProfile /></ProtectedProfileRoute>,
+      },
       { path: "announcements", element: <Announcements /> },
-      { path: "user", element: <UserDashboard /> },
-      { path: "member", element: <MemberDashboard /> },
 
-      
-      { path: "make_announcement", element:<AdminRoutes><MakeAnnouncement /></AdminRoutes> },
-      { path: "agreement_requests", element:<AdminRoutes><AgreementRequests /></AdminRoutes> },
-      { path: "manage_coupons", element:<AdminRoutes><ManageCoupons /></AdminRoutes> },
+      // admin routes ---------------------------------------
+     
+      {
+        path: "make_announcement",
+        element: <AdminRoutes><MakeAnnouncement /></AdminRoutes>,
+      },
+      {
+        path: "agreement_requests",
+        element: <AdminRoutes><AgreementRequests /></AdminRoutes>,
+      },
+      {
+        path: "manage_coupons",
+        element: <AdminRoutes><ManageCoupons /></AdminRoutes>,
+      },
+        {
+        path: "manage_members",
+        element: <AdminRoutes><ManageMembers /></AdminRoutes>,
+      },
 
-      { path: "make_payment", element:<MemberRoutes><MakePayment /></MemberRoutes> },
-      { path: "payment", element:<MemberRoutes><Payment /></MemberRoutes> },
-      { path: "payment_history", element:<MemberRoutes><PaymentHistory /></MemberRoutes> },
+      // members routes ---------------------------------------
+      {
+        path: "make_payment",
+        element: <MemberRoutes><MakePayment /></MemberRoutes>,
+      },
+      {
+        path: "payment",
+        element: <MemberRoutes><Payment /></MemberRoutes>,
+      },
+      {
+        path: "payment_history",
+        element: <MemberRoutes><PaymentHistory /></MemberRoutes>,
+      },
+    
     ],
   },
   {
     path: "*",
-    element: <div className="text-center text-2xl p-8">404 | Page Not Found</div>,
+    element: <NotFound/>,
   },
 ]);
 

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import Slider from "@mui/material/Slider";
 import { useState } from "react";
 import { axiosPublic, axiosSecure } from "../../hooks/useAxios";
 import { confirmAlert, errorAlert, successAlert } from "../../utils/alerts";
@@ -11,26 +10,24 @@ import { useNavigate } from "react-router";
 import LoadingModal from "../../utils/LoadingModal";
 
 const Apartment = () => {
-  const [fromRange, setFromRange] = useState(1215);
-  const [toRange, setToRange] = useState(4900);
+  const DEFAULT_FROM = 1215;
+  const DEFAULT_TO = 4900;
+
+  const [fromRange, setFromRange] = useState(DEFAULT_FROM);
+  const [toRange, setToRange] = useState(DEFAULT_TO);
   const [page, setPage] = useState(1);
+  const [searchActive, setSearchActive] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryKey: ["apartment", "all", page],
+    queryKey: ["apartment", searchActive, page],
     queryFn: async () => {
-      const res = await axiosPublic.get("/apartment/all", {
-        params: {
-          page: page,
-          limit: 6,
-          fromRange: fromRange,
-          toRange: toRange,
-        },
-      });
-      console.log(res.data);
+      const params = searchActive ? { fromRange, toRange } : { page, limit: 6 };
+
+      const res = await axiosPublic.get("/apartment/all", { params });
       return res.data;
     },
     refetchOnWindowFocus: false,
@@ -41,18 +38,33 @@ const Apartment = () => {
       errorAlert("From range must be less than to range");
       return;
     }
+    setSearchActive(true);
+    setPage(1); // reset pagination
+    refetch();
+  };
+
+  const handleClearFilter = () => {
+    setFromRange(DEFAULT_FROM);
+    setToRange(DEFAULT_TO);
+    setSearchActive(false);
+    setPage(1);
     refetch();
   };
 
   const pages = [];
-  for (let i = 1; i <= data?.totalPages; i++) {
-    pages.push(i);
+  if (!searchActive && data?.totalPages) {
+    for (let i = 1; i <= data.totalPages; i++) {
+      pages.push(i);
+    }
   }
 
   const handleSelectedApartment = async (apartment) => {
     try {
-      if (!user) {
-        navigate("/login");
+      if (!user) return navigate("/login");
+
+      if (apartment.status === "not_available") {
+        errorAlert("This apartment is already rented or in agreement");
+        return;
       }
 
       const isConfirmed = await confirmAlert(
@@ -66,40 +78,29 @@ const Apartment = () => {
           apartment,
           user,
         });
-        console.log(res);
-        if (res.status === 201) {
-          successAlert("Booking Successful");
-          return;
-        }
-      } else {
-        return;
+        if (res.status === 201) successAlert("Booking Successful");
       }
     } catch (error) {
       if (error.status === 409) errorAlert("You already have a booking");
-      else {
-        console.log(error);
-        errorAlert(error.response.data.message);
-      }
+      else errorAlert(error?.response?.data?.message || "Unknown error");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="bg-teal-900">
-      <div className="w-full h-40 "> </div>
+      <div className="w-full h-40" />
 
-      {/*  search by range  */}
+      {/* Filter/Search UI */}
       <div className="text-center lg:w-6/12 w-11/12 font-semibold items-start mx-auto bg-base-200 rounded-xl lg:p-8 p-4 flex flex-col gap-4">
-        <h1 className="text-xl">Lets Find Your Home</h1>
-        <div className="w-full">
-          <RangeSlider
-            setFromRange={setFromRange}
-            setToRange={setToRange}
-            fromRange={fromRange}
-            toRange={toRange}
-          />
-        </div>
+        <h1 className="text-xl">Let's Find Your Home</h1>
+
+        <RangeSlider
+          setFromRange={setFromRange}
+          setToRange={setToRange}
+          fromRange={fromRange}
+          toRange={toRange}
+        />
 
         <div className="flex lg:flex-row flex-col lg:items-center items-start lg:justify-center gap-4">
           <input
@@ -112,30 +113,33 @@ const Apartment = () => {
             value={`To: $${toRange}`}
             readOnly
           />
-          <button className="btn" onClick={handleFindByRange}>
+
+          <button
+            className="btn bg-teal-700 text-white"
+            onClick={handleFindByRange}
+          >
             {isFetching ? (
-              <div>
-                <span className="loading loading-spinner loading-sm"></span>{" "}
+              <>
+                <span className="loading loading-spinner loading-sm"></span>
                 Searching...
-              </div>
+              </>
             ) : (
               "Search Home"
             )}
           </button>
-          <div>
-            {data?.data && data?.total !== 20 ? (
+
+          {searchActive && (
+            <>
               <button className="btn btn-ghost">
-                {" "}
-                Total result found: {data.total}
+                Total result found: {data?.total}
               </button>
-            ) : (
-              ""
-            )}
-          </div>
+              <button className="btn btn-error" onClick={handleClearFilter}>
+                Clear Filter
+              </button>
+            </>
+          )}
         </div>
       </div>
-
-      {/*  search by range  */}
 
       <div className="text-center py-8 text-4xl text-white lg:pt-20">
         <h1>All Floors</h1>
@@ -150,9 +154,7 @@ const Apartment = () => {
         {!isLoading &&
           !isFetching &&
           !error &&
-          data &&
           data?.data?.map((apartment) => (
-            // apartment cards
             <ApartmentCard
               key={apartment._id}
               {...apartment}
@@ -161,23 +163,24 @@ const Apartment = () => {
           ))}
       </div>
 
-      <div className="flex justify-center items-center lg:pb-20">
-        <div className="flex gap-4">
-          {pages.map((num) => (
-            <button
-              key={num}
-              className={`btn ${
-                data.currentPage === num ? "btn-warning" : "btn-active"
-              }`}
-              onClick={() => {
-                setPage(num);
-              }}
-            >
-              Page {num}
-            </button>
-          ))}
+      {/* Pagination only for default view */}
+      {!searchActive && (
+        <div className="flex justify-center items-center lg:pb-20">
+          <div className="flex gap-4">
+            {pages.map((num) => (
+              <button
+                key={num}
+                className={`btn ${
+                  data?.currentPage === num ? "btn-warning" : "btn-active"
+                }`}
+                onClick={() => setPage(num)}
+              >
+                Page {num}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

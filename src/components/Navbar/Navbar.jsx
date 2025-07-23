@@ -13,7 +13,7 @@ import { confirmAlert, errorAlert } from "../../utils/alerts";
 import CommonNavLinks from "./CommonNavLinks"; // adjust path as needed
 
 const Navbar = () => {
-  const { user } = useUser();
+  const { user, userLoading } = useUser();
   const { setUser } = useContext(AuthContext);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -44,7 +44,9 @@ const Navbar = () => {
   const handleLogout = async () => {
     document.activeElement.blur();
     try {
-      const isConfirmed = await confirmAlert("Are you sure you want to logout?");
+      const isConfirmed = await confirmAlert(
+        "Are you sure you want to logout?"
+      );
       if (!isConfirmed) {
         return;
       }
@@ -83,7 +85,6 @@ const Navbar = () => {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1 flex items-center gap-4">
           <CommonNavLinks
-            user={user}
             handleLogout={handleLogout}
             onLinkClick={() => document.activeElement.blur()}
           />
@@ -124,17 +125,63 @@ const Navbar = () => {
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu bg-base-200  text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
-              <CommonNavLinks
-                user={user}
-                handleLogout={handleLogout}
-                onLinkClick={() => {
-                  document.getElementById("my-drawer").checked = false;
-                }}
-              />
+            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
+              <li className="border-b border-b-gray-300 pb-2">
+                <Link to="/" className="flex items-center gap-2">
+                  <FiHome />
+                  Home
+                </Link>
+              </li>
 
-           
-              
+              <li className="border-b border-b-gray-300 pb-2">
+                <Link to="/apartment" className="flex items-center gap-2">
+                  <RiCommunityLine />
+                  Apartment
+                </Link>
+              </li>
+
+              {user && (
+                <li className="border-b border-b-gray-300 pb-2">
+                  <Link
+                    to="/dashboard/my_profile"
+                    className="flex items-center gap-2"
+                  >
+                    <div className="avatar avatar-online">
+                      <div className="w-8 rounded-full">
+                        <img src={user.photoURL} alt="User Avatar" />
+                      </div>
+                    </div>
+                    My Profile
+                  </Link>
+                </li>
+              )}
+              {user && (
+                <li className="border-b border-b-gray-300 pb-2">
+                  <Link to="/dashboard" className="flex items-center gap-2">
+                    <RiDashboardLine />
+                    Dashboard
+                  </Link>
+                </li>
+              )}
+
+              {user && (
+                <li>
+                  <Link to="/apartment" className="flex items-center gap-2">
+                    <RiDashboardLine />
+                    Logout
+                  </Link>
+                </li>
+              )}
+
+              {!user && (
+                <li>
+                  <Link className="flex items-center gap-2">
+                    <FiLogIn />
+                    Login
+                  </Link>
+                </li>
+              )}
+
               <li>
                 <button
                   className="btn w-full flex items-center justify-center gap-2"

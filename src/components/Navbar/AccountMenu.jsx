@@ -14,8 +14,10 @@ import { signOut } from "firebase/auth";
 import auth from "../../firebase.init";
 import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
+import useUser from "../../hooks/useUser";
 
-export default function AccountMenu({ user }) {
+export default function AccountMenu() {
+  const { user } = useUser();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate("/dashboard");
@@ -26,7 +28,6 @@ export default function AccountMenu({ user }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  // console.log(user);
 
   const handleLogout = () => {
     signOut(auth);
@@ -37,6 +38,7 @@ export default function AccountMenu({ user }) {
     setAnchorEl(null);
     navigate("/dashboard");
   };
+
 
   return (
     <React.Fragment>
@@ -55,8 +57,8 @@ export default function AccountMenu({ user }) {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar src={user.photoURL} sx={{ width: 40, height: 40 }}>
-              M
+            <Avatar src={user?.photoURL} sx={{ width: 40, height: 40 }}>
+              {user?.displayName}
             </Avatar>
           </IconButton>
         </Tooltip>
@@ -99,8 +101,8 @@ export default function AccountMenu({ user }) {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} disabled>
-          <Avatar src={user.photoURL} />
-          {user.displayName}
+          <Avatar src={user?.photoURL} />
+          {user?.displayName}
         </MenuItem>
 
         <Divider />

@@ -12,5 +12,7 @@ body {
 }
 
 a.active {
-  background-color: gainsboro;
+  background-color: rgb(192, 245, 245);
+  
+  color: rgb(0, 75, 75);
 }

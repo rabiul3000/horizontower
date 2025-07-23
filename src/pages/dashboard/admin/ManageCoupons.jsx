@@ -5,6 +5,7 @@ import { errorAlert, successAlert } from "../../../utils/alerts";
 import { axiosSecure } from "../../../hooks/useAxios";
 import { Button } from "@mui/material";
 import CouponRow from "./CouponRow";
+import LoadingState from "../../../utils/LoadingState";
 
 const ManageCoupon = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +42,6 @@ const ManageCoupon = () => {
       }
     } catch (error) {
       errorAlert(error.message);
-      // errorAlert("Server error. Please try again.");
     }
   };
 
@@ -75,12 +75,17 @@ const ManageCoupon = () => {
             {isLoading ? (
               <tr>
                 <td colSpan={4} className="text-center">
-                  Loading...
+                  {<LoadingState />}
                 </td>
               </tr>
             ) : coupons.length ? (
               coupons.map((coupon, index) => (
-                <CouponRow key={coupon._id} coupon={coupon} index={index} refetch={refetch} />
+                <CouponRow
+                  key={coupon._id}
+                  coupon={coupon}
+                  index={index}
+                  refetch={refetch}
+                />
               ))
             ) : (
               <tr>

@@ -9,11 +9,10 @@ import {
 } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import useUser from "../../../hooks/useUser";
-import useAxios from "../../../hooks/useAxios";
+import { axiosPublic, axiosSecure } from "../../../hooks/useAxios";
 
 const AdminProfile = () => {
   const { user, userRole } = useUser();
-  const { axiosSecure } = useAxios();
 
   // React Query logic
   const {
@@ -39,7 +38,6 @@ const AdminProfile = () => {
 
       const usersCount = users.filter((u) => u.role === "user").length;
       const membersCount = users.filter((u) => u.role === "member").length;
-      console.log(apartmentRes);
 
       return {
         totalRooms,

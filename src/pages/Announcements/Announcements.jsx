@@ -21,7 +21,6 @@ const Announcements = () => {
     queryKey: ["announcements", "all"],
     queryFn: async () => {
       const res = await axiosSecure.get("/announcement/all");
-      console.log(res.data);
       return res.data;
     },
   });

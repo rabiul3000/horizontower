@@ -5,10 +5,13 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../context/AuthContext";
 import { errorAlert, successAlert } from "../../utils/alerts";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import auth from "../../firebase.init";
+import { axiosPublic } from "../../hooks/useAxios";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { setUser, loginWithEmailAndPassword } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -30,19 +33,32 @@ const Login = () => {
 
     setLoading(false);
   };
-
   const handleGoogleLogin = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const user = userCredential.user;
-      console.log(user);
+
+      // 🔍 Check if user exists in your backend DB
+      const response = await axiosPublic.get(`/user/user_exist/${user.email}`);
+      if (!response?.data) {
+        // ❌ User doesn't exist → sign them out and show error
+        await auth.signOut();
+        errorAlert("No account found. Please register first.");
+        return;
+      }
+
+      // ✅ User exists → set user and proceed
       setUser(user);
       successAlert("Login successful!");
       navigate("/");
     } catch (error) {
+      console.error("Google login failed:", error);
       errorAlert("Login failed. Please try again.");
     }
+  };
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -71,11 +87,18 @@ const Login = () => {
           <TextField
             id="password"
             fullWidth
-            label="password"
+            label="Password"
             variant="outlined"
             name="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             required
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </IconButton>
+              ),
+            }}
           />
         </div>
         <div>

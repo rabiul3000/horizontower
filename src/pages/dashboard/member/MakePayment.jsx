@@ -7,13 +7,14 @@ import useUser from "../../../hooks/useUser";
 import { motion } from "framer-motion";
 import { TextField, Button } from "@mui/material";
 import { axiosSecure } from "../../../hooks/useAxios";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const MakePayment = () => {
+  const location = useLocation();
   const { user, userLoading } = useUser();
   const [selectedMonth, setSelectedMonth] = useState("");
   const [loading, setLoading] = useState(false);
-  const [couponCode, setCouponCode] = useState("");
+  const [couponCode, setCouponCode] = useState(location?.state?.code || "");
   const [discountedRent, setDiscountedRent] = useState(null);
   const [couponStatus, setCouponStatus] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
@@ -28,6 +29,7 @@ const MakePayment = () => {
     queryKey: ["agreement", user?.email],
     queryFn: async () => {
       const res = await axiosSecure(`/agreement/${user?.email}`);
+
       return res.data;
     },
     enabled: !!user?.email,
@@ -98,7 +100,6 @@ const MakePayment = () => {
   if (error) return errorAlert("Failed to load apartment info");
 
   const time = "2025-07-19T11:36:42.024+00:00";
-
 
   return (
     <motion.div
@@ -192,7 +193,7 @@ const MakePayment = () => {
               {couponLoading ? (
                 <span className="loading loading-sm loading-dots"></span>
               ) : (
-                "Apply"
+                coupon ? "Applied" : "Apply"
               )}
             </Button>
           </div>

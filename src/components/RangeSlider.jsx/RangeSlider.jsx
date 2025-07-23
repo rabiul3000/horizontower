@@ -1,39 +1,36 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Slider from "@mui/material/Slider";
+import React, { useState, useEffect } from "react";
+import { Slider } from "@mui/material";
 
-function valuetext(value) {
-  return `${value}`;
-}
-
-export default function RangeSlider({
-  setFromRange,
-  setToRange,
-  fromRange,
-  toRange,
-}) {
-  const [value, setValue] = React.useState([fromRange, toRange]);
+const RangeSlider = ({ setFromRange, setToRange, fromRange, toRange }) => {
+  const [value, setValue] = useState([fromRange, toRange]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setValue(newValue); // only update local state
+  };
+
+  const handleChangeCommitted = (event, newValue) => {
     setFromRange(newValue[0]);
     setToRange(newValue[1]);
   };
 
   return (
-    <Box>
+    <div className="w-full">
+      <div className="text-center py-2">$ Rent Range</div>
       <Slider
-        sx={{ color: "teal" }}
-        getAriaLabel={() => "Rent range"}
+        getAriaLabel={() => "Price range"}
         value={value}
         onChange={handleChange}
-        step={100}
-        min={1215}
-        max={4900}
-        marks
+        onChangeCommitted={handleChangeCommitted}
         valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
+        min={1000}
+        max={5000}
+        step={50}
+        sx={{
+          color: "#14b8a6", // Tailwind teal-500
+        }}
       />
-    </Box>
+    </div>
   );
-}
+};
+
+export default RangeSlider;

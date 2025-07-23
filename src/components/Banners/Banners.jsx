@@ -5,14 +5,16 @@ import banner2 from "../../assets/banners/banner2.jpg";
 import banner3 from "../../assets/banners/banner3.jpg";
 import banner4 from "../../assets/banners/banner4.jpg";
 import { Link } from "react-router";
+import useUser from "../../hooks/useUser";
 
 const Banners = () => {
   const slides = [banner1, banner2, banner3, banner4];
+  const {user} = useUser();
 
   return (
     <div className="w-full h-screen">
       <Carousel
-        //   autoPlay
+        autoPlay
         infiniteLoop
         showThumbs={false}
         showStatus={false}
@@ -39,10 +41,12 @@ const Banners = () => {
                 Beautiful 2-bedroom apartment just steps from downtown
               </p>
               <div className="flex flex-col lg:flex-row  gap-4">
-                <button className="btn glass px-6 text-white">
+                <Link className="btn glass px-6 text-white" to='/apartment'>
                   Search a Room
-                </button>
-                <Link className="btn px-6" to={'/login'}>Login</Link>
+                </Link>
+                {
+                  user ? <Link className="btn px-6" to={'/dashboard'}>Dashboard</Link>:<Link className="btn px-6" to={'/login'}>Login</Link>
+                }
               </div>
 
               <div className="flex flex-col lg:flex-row lg:m-24 my-6 gap-3 lg:gap-24">

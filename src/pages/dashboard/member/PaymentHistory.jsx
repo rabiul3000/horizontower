@@ -48,6 +48,11 @@ const PaymentHistory = () => {
       </div>
     );
   }
+  if (!paymentHistory.length) {
+    return (
+      <div className="text-gray-800 text-center mt-10">No payment found.</div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-8">

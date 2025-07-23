@@ -8,16 +8,10 @@ import { errorAlert } from "../../utils/alerts";
 import CouponCard from "../Cards/CouponCard";
 
 const Coupons = () => {
-  const {
-    data,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["coupon", "all"],
     queryFn: async () => {
       const res = await axiosPublic.get("/coupon/all");
-      console.log(res.data);
       return res.data;
     },
     refetchOnWindowFocus: false,
@@ -31,7 +25,6 @@ const Coupons = () => {
       transition: { delay: i * 0.2, duration: 0.6 },
     }),
   };
- 
 
   if (isLoading) return <LoadingState />;
   if (error) return errorAlert("Coupons fetching failed");
@@ -51,7 +44,7 @@ const Coupons = () => {
           Top Horizon Tower Coupons
         </button>
       </h1>
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-1 gap-8 lg:grid-cols-2">
         {data.map((coupon) => (
           <CouponCard key={coupon._id} {...coupon} />
         ))}

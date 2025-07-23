@@ -11,6 +11,8 @@ import useUser from "../../../hooks/useUser";
 
 const UserProfile = () => {
   const { user, userRole } = useUser();
+  console.log(userRole)
+  
 
   return (
     <div className=" flex items-center justify-center  py-12 px-4 ">
@@ -32,7 +34,7 @@ const UserProfile = () => {
               <FaUser /> {user?.displayName || "Unknown User"}
               <span className="badge bg-gray-700 text-white text-xs font-medium flex items-center gap-1">
                 <FaUser className="text-white text-sm" />
-                {userRole}
+                {userRole || 'User' }
               </span>
             </h2>
 

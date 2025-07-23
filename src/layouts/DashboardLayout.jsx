@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Outlet, Link } from "react-router";
-import { FiMenu } from "react-icons/fi";
+import { FiMenu, FiXCircle } from "react-icons/fi";
 import SidebarUser from "../components/Sidebar/SidebarUser";
 import useUser from "../hooks/useUser";
 import SidebarAdmin from "../components/Sidebar/SidebarAdmin";
@@ -30,7 +30,6 @@ const drawerWidth = 240;
 function DashBoardLayout(props) {
   const { user, userLoading, setUserRole, userRole } = useUser();
 
-  const role = "user";
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -51,12 +50,13 @@ function DashBoardLayout(props) {
   };
 
   const { error, isLoading } = useQuery({
-    queryKey: ["user", user],
+    queryKey: ["user"],
     queryFn: async () => {
-      const response = await axiosSecure.get(`/user`);
+      const response = await axiosSecure.get("/user/get_user");
       setUserRole(response.data.role);
       return response.data;
     },
+    enabled: !userLoading && !!user, // ✅ wait until user is loaded
   });
 
   if (userLoading) {
@@ -69,22 +69,35 @@ function DashBoardLayout(props) {
   if (error) {
     return errorAlert(error.message);
   }
-
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
-      {userRole === "user" && <SidebarUser />}
-      {userRole === "member" && <SidebarMember />}
-      {userRole === "admin" && <SidebarAdmin />}
+      <div onClick={handleDrawerClose}>
+        {userRole === "user" && <SidebarUser />}
+        {userRole === "member" && <SidebarMember />}
+        {userRole === "admin" && <SidebarAdmin />}
+      </div>
       <Divider />
+
+      <div className="lg:hidden">
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleDrawerClose}>
+            <ListItemIcon>
+              <FiXCircle size={20} />
+            </ListItemIcon>
+            <ListItemText primary="Close" />
+          </ListItemButton>
+        </ListItem>
+        <Divider />
+      </div>
 
       <ListItem disablePadding>
         <ListItemButton component={Link} to="/">
           <ListItemIcon>
             <BiExit size={20} className="-rotate-180" />
           </ListItemIcon>
-          <ListItemText primary="Exit" />
+          <ListItemText primary="Exit Dashboard" />
         </ListItemButton>
       </ListItem>
     </div>
@@ -105,18 +118,17 @@ function DashBoardLayout(props) {
         }}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <FiMenu size={22} />
-          </IconButton>
           <Typography variant="h6" noWrap component="div">
             Home Horizon
           </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerToggle}
+            sx={{ ml: "auto", display: { sm: "none" } }} // move to right
+          >
+            <FiMenu size={22} />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box
@@ -127,6 +139,7 @@ function DashBoardLayout(props) {
         <Drawer
           container={container}
           variant="temporary"
+          anchor="right" // 👈 this makes it slide in from the right
           open={mobileOpen}
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}

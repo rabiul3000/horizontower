@@ -21,7 +21,7 @@ const SidebarAdmin = () => {
       </ListItem>
 
       <ListItem disablePadding>
-        <ListItemButton component={NavLink} to="manage-members" end>
+        <ListItemButton component={NavLink} to="/dashboard/manage_members" end>
           <ListItemIcon><MdGroups size={20} /></ListItemIcon>
           <ListItemText primary="Manage Members" />
         </ListItemButton>

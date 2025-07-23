@@ -3,8 +3,10 @@ import { Link } from "react-router";
 import { FiHome, FiLogIn } from "react-icons/fi";
 import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
 import AccountMenu from "./AccountMenu";
+import useUser from "../../hooks/useUser";
 
-const CommonNavLinks = ({ user, onLinkClick, handleLogout }) => {
+const CommonNavLinks = ({ onLinkClick, handleLogout }) => {
+  const { user, userLoading } = useUser();
   return (
     <>
       <li onClick={onLinkClick}>
@@ -21,14 +23,11 @@ const CommonNavLinks = ({ user, onLinkClick, handleLogout }) => {
       </li>
 
       <li onClick={onLinkClick}>
-        {user ? (
-          <AccountMenu user={user} />
-        ) : (
-          <Link to="/login">
-            <FiLogIn />
-            Login
-          </Link>
+        {userLoading && (
+          <span className="loading loading-bars text-teal-300 loading-sm"></span>
         )}
+        {user && <AccountMenu user={user} />}
+        {!userLoading && !user && <Link to="/login"><FiLogIn />Login</Link>}
       </li>
     </>
   );
