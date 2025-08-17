@@ -15,31 +15,31 @@ import CommonNavLinks from "./CommonNavLinks"; // adjust path as needed
 const Navbar = () => {
   const { user, userLoading } = useUser();
   const { setUser } = useContext(AuthContext);
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  // const [showNavbar, setShowNavbar] = useState(true);
+  // const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const currentScrollY = window.scrollY;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        // scrolling down
-        setShowNavbar(false);
-      } else {
-        // scrolling up
-        setShowNavbar(true);
-      }
+  //     if (currentScrollY > lastScrollY && currentScrollY > 80) {
+  //       // scrolling down
+  //       setShowNavbar(false);
+  //     } else {
+  //       // scrolling up
+  //       setShowNavbar(true);
+  //     }
 
-      setLastScrollY(currentScrollY);
-    };
+  //     setLastScrollY(currentScrollY);
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
+  //   window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [lastScrollY]);
 
   const handleLogout = async () => {
     document.activeElement.blur();
@@ -60,16 +60,7 @@ const Navbar = () => {
   // console.log(user)
 
   const LgMenu = () => (
-    <div
-      className={`navbar bg-teal-800 text-white w-6/12 m-8 mx-auto px-4 rounded-xl shadow-sm fixed top-0 left-3/12 z-50
-    
-    ${
-      showNavbar
-        ? "opacity-100 translate-y-0 duration-1000 ease-in-out"
-        : "opacity-0"
-    }
-  `}
-    >
+    <div className={`navbar bg-teal-800 text-white fixed px-10 top-0 z-10 h-12`}>
       <div className="flex-1 flex items-center">
         <Link to={"/"}>
           <motion.span
@@ -94,29 +85,51 @@ const Navbar = () => {
   );
 
   const SmMenu = () => (
-    <div className="navbar bg-teal-800 shadow-sm">
+    <div className="navbar bg-teal-800 shadow-sm fixed top-0 z-10 px-4 h-16">
       <div className="flex-1">
         <Link to={"/"}>
           <motion.span
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-end text-white gap-1 cursor-pointer item-end"
+            className="flex items-center text-white gap-2 cursor-pointer"
           >
-            <img src={office} className="w-12 h-12" alt="icon" />
-            <span className="text-2xl"> HomeHorizon</span>
+            <img src={office} className="w-7 h-7" alt="icon" />
+            <span className="text-sm font-medium">HomeHorizon</span>
           </motion.span>
         </Link>
       </div>
-      <div className="flex-none ">
+
+      <div className="flex-none flex items-center gap-4">
+        {/* Dynamic Login / User on top navbar */}
+        {user ? (
+          <Link
+            to="/dashboard"
+            className="flex  items-center gap-2 text-white text-xs"
+          >
+            <div className="avatar avatar-online">
+              <div className="w-7 h-7 rounded-full">
+                <img src={user.photoURL} alt="User Avatar" />
+              </div>
+            </div>
+            <span className="truncate capitalize text-sm max-w-[100px]">
+              {user.displayName || "My Profile"}
+            </span>
+          </Link>
+        ) : (
+          <Link to="/login" className="btn btn-soft  text-sm btn-sm ">
+            Login
+          </Link>
+        )}
+
+        {/* Drawer button (sidebar) */}
         <div className="drawer drawer-end">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
-            {/* Page content here */}
             <label
               htmlFor="my-drawer"
-              className="btn btn-ghost text-white drawer-button"
+              className="btn btn-ghost text-white drawer-button p-2"
             >
-              <FiMenu className="text-2xl mt-3" />
+              <FiMenu className="text-xl" />
             </label>
           </div>
           <div className="drawer-side bg-teal-800">
@@ -127,14 +140,17 @@ const Navbar = () => {
             ></label>
             <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
               <li className="border-b border-b-gray-300 pb-2">
-                <Link to="/" className="flex items-center gap-2">
+                <Link to="/" className="flex items-center gap-2 text-sm">
                   <FiHome />
                   Home
                 </Link>
               </li>
 
               <li className="border-b border-b-gray-300 pb-2">
-                <Link to="/apartment" className="flex items-center gap-2">
+                <Link
+                  to="/apartment"
+                  className="flex items-center gap-2 text-sm"
+                >
                   <RiCommunityLine />
                   Apartment
                 </Link>
@@ -144,10 +160,10 @@ const Navbar = () => {
                 <li className="border-b border-b-gray-300 pb-2">
                   <Link
                     to="/dashboard"
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 text-sm"
                   >
                     <div className="avatar avatar-online">
-                      <div className="w-8 rounded-full">
+                      <div className="w-7 h-7 rounded-full">
                         <img src={user.photoURL} alt="User Avatar" />
                       </div>
                     </div>
@@ -157,7 +173,10 @@ const Navbar = () => {
               )}
               {user && (
                 <li className="border-b border-b-gray-300 pb-2">
-                  <Link to="/dashboard" className="flex items-center gap-2">
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center gap-2 text-sm"
+                  >
                     <RiDashboardLine />
                     Dashboard
                   </Link>
@@ -166,7 +185,10 @@ const Navbar = () => {
 
               {user && (
                 <li>
-                  <button onClick={handleLogout}  className="flex items-center gap-2">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 text-sm"
+                  >
                     <RiDashboardLine />
                     Logout
                   </button>
@@ -175,7 +197,7 @@ const Navbar = () => {
 
               {!user && (
                 <li>
-                  <Link className="flex items-center gap-2" to='/login'>
+                  <Link className="flex items-center gap-2 text-sm" to="/login">
                     <FiLogIn />
                     Login
                   </Link>
@@ -184,7 +206,7 @@ const Navbar = () => {
 
               <li>
                 <button
-                  className="btn w-full flex items-center justify-center gap-2"
+                  className="btn w-full flex items-center justify-center gap-2 text-sm"
                   onClick={() => {
                     document.getElementById("my-drawer").checked = false;
                   }}
