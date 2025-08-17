@@ -4,6 +4,7 @@ import { FiHome, FiLogIn } from "react-icons/fi";
 import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
 import AccountMenu from "./AccountMenu";
 import useUser from "../../hooks/useUser";
+import { MdInfo } from "react-icons/md";
 
 const CommonNavLinks = ({ onLinkClick, handleLogout }) => {
   const { user, userLoading } = useUser();
@@ -19,6 +20,13 @@ const CommonNavLinks = ({ onLinkClick, handleLogout }) => {
         <Link to="/apartment" className="flex items-center gap-2">
           <RiCommunityLine />
           Apartment
+        </Link>
+      </li>
+
+      <li onClick={onLinkClick}>
+        <Link to="/about" className="flex items-center gap-2">
+          <MdInfo />
+          About
         </Link>
       </li>
 

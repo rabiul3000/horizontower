@@ -19,6 +19,7 @@ import PaymentHistory from "../pages/dashboard/member/PaymentHistory";
 import ManageMembers from "../pages/dashboard/admin/ManageMembers";
 import NotFound from "../pages/NotFound/NotFound";
 import AuthRoute from "../pages/dashboard/controlRoutes/AuthRoute";
+import AboutBuilding from "../components/AboutBuilding/AboutBuilding";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "apartment", element: <Apartment /> },
+      { path: "about", element: <AboutBuilding /> },
       { path: "register", element: <AuthRoute> <Register /> </AuthRoute> },
       { path: "login", element: <AuthRoute> <Login /> </AuthRoute> },
     ],

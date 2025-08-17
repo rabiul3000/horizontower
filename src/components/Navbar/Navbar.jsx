@@ -60,7 +60,9 @@ const Navbar = () => {
   // console.log(user)
 
   const LgMenu = () => (
-    <div className={`navbar bg-teal-800 text-white fixed px-10 top-0 z-10 h-12`}>
+    <div
+      className={`navbar bg-teal-800 text-white fixed px-10 top-0 z-10 h-12`}
+    >
       <div className="flex-1 flex items-center">
         <Link to={"/"}>
           <motion.span
