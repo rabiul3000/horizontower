@@ -20,6 +20,7 @@ import ManageMembers from "../pages/dashboard/admin/ManageMembers";
 import NotFound from "../pages/NotFound/NotFound";
 import AuthRoute from "../pages/dashboard/controlRoutes/AuthRoute";
 import AboutBuilding from "../components/AboutBuilding/AboutBuilding";
+import Overview from "../pages/dashboard/admin/Overview";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "make_announcement",
         element: <AdminRoutes><MakeAnnouncement /></AdminRoutes>,
+      },
+      {
+        path: "overview",
+        element: <AdminRoutes><Overview /></AdminRoutes>,
       },
       
       {

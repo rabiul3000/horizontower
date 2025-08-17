@@ -9,6 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { FaUserShield } from "react-icons/fa";
 import { MdGroups, MdAnnouncement } from "react-icons/md";
 import { RiFileList2Line, RiCoupon2Line } from "react-icons/ri";
+import { GrOverview } from "react-icons/gr";
 
 const SidebarAdmin = () => {
   return (
@@ -17,6 +18,13 @@ const SidebarAdmin = () => {
         <ListItemButton component={NavLink} to="/dashboard" end>
           <ListItemIcon><FaUserShield size={20} /></ListItemIcon>
           <ListItemText primary="Admin Profile" />
+        </ListItemButton>
+      </ListItem>
+
+      <ListItem disablePadding>
+        <ListItemButton component={NavLink} to="/dashboard/overview" end>
+          <ListItemIcon><GrOverview  size={20} /></ListItemIcon>
+          <ListItemText primary="Overview" />
         </ListItemButton>
       </ListItem>
 
