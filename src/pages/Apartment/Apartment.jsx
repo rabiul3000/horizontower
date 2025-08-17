@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { axiosPublic, axiosSecure } from "../../hooks/useAxios";
 import { confirmAlert, errorAlert, successAlert } from "../../utils/alerts";
 import LoadingState from "../../utils/LoadingState";
@@ -17,6 +17,7 @@ const Apartment = () => {
   const [toRange, setToRange] = useState(DEFAULT_TO);
   const [page, setPage] = useState(1);
   const [searchActive, setSearchActive] = useState(false);
+  const [sortOrder, setSortOrder] = useState(null);
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ const Apartment = () => {
       return;
     }
     setSearchActive(true);
-    setPage(1); // reset pagination
+    setPage(1);
     refetch();
   };
 
@@ -48,6 +49,7 @@ const Apartment = () => {
     setToRange(DEFAULT_TO);
     setSearchActive(false);
     setPage(1);
+    setSortOrder(null);
     refetch();
   };
 
@@ -87,6 +89,15 @@ const Apartment = () => {
       setLoading(false);
     }
   };
+
+  // --- Apply sorting locally (frontend only) ---
+  let sortedData = data?.data ? [...data.data] : [];
+  if (sortOrder === "asc") {
+    sortedData.sort((a, b) => a.rent - b.rent);
+  } else if (sortOrder === "desc") {
+    sortedData.sort((a, b) => b.rent - a.rent);
+  }
+
   return (
     <div className="bg-teal-900">
       <div className="w-full h-40" />
@@ -141,8 +152,29 @@ const Apartment = () => {
         </div>
       </div>
 
+      {/* Section Title */}
       <div className="text-center py-8 text-4xl text-white lg:pt-20">
         <h1>All Floors</h1>
+
+        {/* Sorting Buttons */}
+        <div className="flex justify-center gap-4 mt-6">
+          <button
+            onClick={() => setSortOrder("asc")}
+            className={`btn ${
+              sortOrder === "asc" ? "btn-warning" : "btn-outline"
+            }`}
+          >
+            Price: Low to High
+          </button>
+          <button
+            onClick={() => setSortOrder("desc")}
+            className={`btn ${
+              sortOrder === "desc" ? "btn-warning" : "btn-outline"
+            }`}
+          >
+            Price: High to Low
+          </button>
+        </div>
       </div>
 
       <LoadingModal loading={loading} />
@@ -154,7 +186,7 @@ const Apartment = () => {
         {!isLoading &&
           !isFetching &&
           !error &&
-          data?.data?.map((apartment) => (
+          sortedData?.map((apartment) => (
             <ApartmentCard
               key={apartment._id}
               {...apartment}
