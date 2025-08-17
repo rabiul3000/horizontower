@@ -9,6 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { FaUserCircle } from "react-icons/fa";
 import { MdAnnouncement, MdPayment } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
+import { GrOverview } from "react-icons/gr";
 
 const SidebarMember = () => {
   return (
@@ -19,6 +20,15 @@ const SidebarMember = () => {
             <FaUserCircle size={20} />
           </ListItemIcon>
           <ListItemText primary="My Profile" />
+        </ListItemButton>
+      </ListItem>
+      
+      <ListItem disablePadding>
+        <ListItemButton component={NavLink} to="overview_member" end>
+          <ListItemIcon>
+            <GrOverview size={20} />
+          </ListItemIcon>
+          <ListItemText primary="Overview" />
         </ListItemButton>
       </ListItem>
 

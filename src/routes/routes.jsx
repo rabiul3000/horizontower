@@ -21,6 +21,7 @@ import NotFound from "../pages/NotFound/NotFound";
 import AuthRoute from "../pages/dashboard/controlRoutes/AuthRoute";
 import AboutBuilding from "../components/AboutBuilding/AboutBuilding";
 import Overview from "../pages/dashboard/admin/Overview";
+import MemberOverview from "../pages/dashboard/member/MemberOverview";
 
 const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
       {
         path: "payment_history",
         element: <MemberRoutes><PaymentHistory /></MemberRoutes>,
+      },
+      {
+        path: "overview_member",
+        element: <MemberRoutes><MemberOverview /></MemberRoutes>,
       },
     
     ],
