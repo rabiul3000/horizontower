@@ -5,6 +5,7 @@ import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
 import AccountMenu from "./AccountMenu";
 import useUser from "../../hooks/useUser";
 import { MdInfo } from "react-icons/md";
+import ThemeToggle from "../ThemeToggle/ThemeToggle";
 
 const CommonNavLinks = ({ onLinkClick, handleLogout }) => {
   const { user, userLoading } = useUser();
@@ -29,13 +30,19 @@ const CommonNavLinks = ({ onLinkClick, handleLogout }) => {
           About
         </Link>
       </li>
+      
 
       <li onClick={onLinkClick}>
         {userLoading && (
           <span className="loading loading-bars text-teal-300 loading-sm"></span>
         )}
         {user && <AccountMenu user={user} />}
-        {!userLoading && !user && <Link to="/login"><FiLogIn />Login</Link>}
+        {!userLoading && !user && (
+          <Link to="/login">
+            <FiLogIn />
+            Login
+          </Link>
+        )}
       </li>
     </>
   );

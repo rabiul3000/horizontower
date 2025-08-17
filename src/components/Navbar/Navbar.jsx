@@ -1,45 +1,32 @@
-import { FiHome, FiLogIn, FiMenu, FiXCircle } from "react-icons/fi";
-
+import {
+  FiHome,
+  FiLogIn,
+  FiMenu,
+  FiXCircle,
+  FiSun,
+  FiMoon,
+} from "react-icons/fi";
 import { RiCommunityLine, RiDashboardLine } from "react-icons/ri";
 import { motion } from "motion/react";
 import office from "../../assets/office.png";
 import useUser from "../../hooks/useUser";
 import { Link, useNavigate } from "react-router";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import auth from "../../firebase.init";
 import { signOut } from "firebase/auth";
 import { AuthContext } from "../../context/AuthContext";
 import { confirmAlert, errorAlert } from "../../utils/alerts";
 import CommonNavLinks from "./CommonNavLinks"; // adjust path as needed
+import { useTheme } from "../../context/ThemeContext";
 
 const Navbar = () => {
-  const { user, userLoading } = useUser();
+  const { user } = useUser();
   const { setUser } = useContext(AuthContext);
-  // const [showNavbar, setShowNavbar] = useState(true);
-  // const [lastScrollY, setLastScrollY] = useState(0);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const currentScrollY = window.scrollY;
-
-  //     if (currentScrollY > lastScrollY && currentScrollY > 80) {
-  //       // scrolling down
-  //       setShowNavbar(false);
-  //     } else {
-  //       // scrolling up
-  //       setShowNavbar(true);
-  //     }
-
-  //     setLastScrollY(currentScrollY);
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [lastScrollY]);
+  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-teal-900";
+  const textClass = theme === "dark" ? "text-white" : "text-white";
 
   const handleLogout = async () => {
     document.activeElement.blur();
@@ -47,174 +34,153 @@ const Navbar = () => {
       const isConfirmed = await confirmAlert(
         "Are you sure you want to logout?"
       );
-      if (!isConfirmed) {
-        return;
-      }
-      signOut(auth);
+      if (!isConfirmed) return;
+      await signOut(auth);
       setUser(null);
       navigate("/");
     } catch (error) {
       errorAlert(error);
     }
   };
-  // console.log(user)
 
   const LgMenu = () => (
     <div
-      className={`navbar bg-teal-800 text-white fixed px-10 top-0 z-10 h-12`}
+      className={`navbar ${bgClass} ${textClass} fixed top-0 w-full px-10 z-50 h-16`}
     >
-      <div className="flex-1 flex items-center">
+      <div className="flex-1 flex items-center gap-2">
         <Link to={"/"}>
           <motion.span
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-1 cursor-pointer item-end"
+            className="flex items-center gap-1 cursor-pointer"
           >
             <img src={office} className="w-12 h-12" alt="icon" />
-            <span className="text-xl"> Horizon Tower</span>
+            <span className="text-xl font-semibold">Horizon Tower</span>
           </motion.span>
         </Link>
       </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal px-1 flex items-center gap-4">
+
+      <div className="flex-none flex items-center gap-4">
+        <ul className="flex items-center gap-4">
           <CommonNavLinks
             handleLogout={handleLogout}
             onLinkClick={() => document.activeElement.blur()}
           />
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+          >
+            {theme === "light" ? <FiMoon size={18} /> : <FiSun size={18} />}
+          </button>
         </ul>
       </div>
     </div>
   );
 
   const SmMenu = () => (
-    <div className="navbar bg-teal-800 shadow-sm fixed top-0 z-10 px-4 h-16">
-      <div className="flex-1">
+    <div
+      className={`navbar ${bgClass} ${textClass} fixed top-0 w-full px-4 z-50 h-16`}
+    >
+      <div className="flex-1 flex items-center gap-2">
         <Link to={"/"}>
           <motion.span
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center text-white gap-2 cursor-pointer"
+            className="flex items-center gap-2 cursor-pointer"
           >
             <img src={office} className="w-7 h-7" alt="icon" />
-            <span className="text-sm font-medium">HomeHorizon</span>
+            <span className="text-xs font-medium">HomeHorizon</span>
           </motion.span>
         </Link>
       </div>
 
-      <div className="flex-none flex items-center gap-4">
-        {/* Dynamic Login / User on top navbar */}
+      <div className="flex-none flex items-center gap-2">
         {user ? (
-          <Link
-            to="/dashboard"
-            className="flex  items-center gap-2 text-white text-xs"
-          >
-            <div className="avatar avatar-online">
-              <div className="w-7 h-7 rounded-full">
-                <img src={user.photoURL} alt="User Avatar" />
-              </div>
+          <Link to="/dashboard" className="flex items-center gap-2 text-xs">
+            <div className="w-7 h-7 rounded-full overflow-hidden">
+              <img src={user.photoURL} alt="User Avatar" />
             </div>
-            <span className="truncate capitalize text-sm max-w-[100px]">
-              {user.displayName || "My Profile"}
+            <span className="truncate capitalize max-w-[80px]">
+              {user.displayName || "Profile"}
             </span>
           </Link>
         ) : (
-          <Link to="/login" className="btn btn-soft  text-sm btn-sm ">
+          <Link to="/login" className="btn btn-sm">
+            {/* Using simple Tailwind btn classes */}
             Login
           </Link>
         )}
 
-        {/* Drawer button (sidebar) */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+        >
+          {theme === "light" ? <FiMoon size={18} /> : <FiSun size={18} />}
+        </button>
+
+        {/* Drawer / Sidebar */}
         <div className="drawer drawer-end">
           <input id="my-drawer" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
-            <label
-              htmlFor="my-drawer"
-              className="btn btn-ghost text-white drawer-button p-2"
-            >
-              <FiMenu className="text-xl" />
+            <label htmlFor="my-drawer" className="btn btn-ghost p-2">
+              <FiMenu size={22} />
             </label>
           </div>
-          <div className="drawer-side bg-teal-800">
-            <label
-              htmlFor="my-drawer"
-              aria-label="close sidebar"
-              className="drawer-overlay"
-            ></label>
-            <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4 py-12 flex flex-col gap-4">
-              <li className="border-b border-b-gray-300 pb-2">
+          <div
+            className={`drawer-side ${
+              theme === "dark" ? "bg-teal-900" : "bg-teal-500"
+            }`}
+          >
+            <label htmlFor="my-drawer" className="drawer-overlay"></label>
+            <ul className="menu min-h-full w-72 p-4 py-16 flex flex-col gap-4">
+              <li>
                 <Link to="/" className="flex items-center gap-2 text-sm">
-                  <FiHome />
-                  Home
+                  <FiHome /> Home
                 </Link>
               </li>
-
-              <li className="border-b border-b-gray-300 pb-2">
+              <li>
                 <Link
                   to="/apartment"
                   className="flex items-center gap-2 text-sm"
                 >
-                  <RiCommunityLine />
-                  Apartment
+                  <RiCommunityLine /> Apartment
                 </Link>
               </li>
-
               {user && (
-                <li className="border-b border-b-gray-300 pb-2">
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <div className="avatar avatar-online">
-                      <div className="w-7 h-7 rounded-full">
-                        <img src={user.photoURL} alt="User Avatar" />
-                      </div>
-                    </div>
-                    My Profile
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link
+                      to="/dashboard"
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <RiDashboardLine /> Dashboard
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <RiDashboardLine /> Logout
+                    </button>
+                  </li>
+                </>
               )}
-              {user && (
-                <li className="border-b border-b-gray-300 pb-2">
-                  <Link
-                    to="/dashboard"
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <RiDashboardLine />
-                    Dashboard
-                  </Link>
-                </li>
-              )}
-
-              {user && (
-                <li>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <RiDashboardLine />
-                    Logout
-                  </button>
-                </li>
-              )}
-
               {!user && (
                 <li>
-                  <Link className="flex items-center gap-2 text-sm" to="/login">
-                    <FiLogIn />
-                    Login
+                  <Link to="/login" className="flex items-center gap-2 text-sm">
+                    <FiLogIn /> Login
                   </Link>
                 </li>
               )}
-
               <li>
                 <button
-                  className="btn w-full flex items-center justify-center gap-2 text-sm"
-                  onClick={() => {
-                    document.getElementById("my-drawer").checked = false;
-                  }}
+                  className="flex items-center justify-center gap-2 w-full p-2"
+                  onClick={() =>
+                    (document.getElementById("my-drawer").checked = false)
+                  }
                 >
-                  <FiXCircle className="text-lg" />
-                  Close
+                  <FiXCircle /> Close
                 </button>
               </li>
             </ul>
@@ -225,15 +191,14 @@ const Navbar = () => {
   );
 
   return (
-    <div className="">
-      <div className="largeDisplayMenu lg:block hidden z-50">
+    <>
+      <div className="hidden lg:block">
         <LgMenu />
       </div>
-
-      <div className="smallDisplayMenu lg:hidden block">
+      <div className="block lg:hidden">
         <SmMenu />
       </div>
-    </div>
+    </>
   );
 };
 
