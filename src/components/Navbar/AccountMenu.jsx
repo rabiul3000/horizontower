@@ -15,6 +15,7 @@ import auth from "../../firebase.init";
 import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
 import useUser from "../../hooks/useUser";
+import { FiUser } from "react-icons/fi";
 
 export default function AccountMenu() {
   const { user } = useUser();
@@ -111,6 +112,12 @@ export default function AccountMenu() {
             <RiDashboardLine size={20} />
           </ListItemIcon>
           Dashboard
+        </MenuItem>
+        <MenuItem onClick={handleGotoDashboard}>
+          <ListItemIcon>
+            <FiUser  size={20} />
+          </ListItemIcon>
+          My Profile
         </MenuItem>
 
         <MenuItem onClick={handleLogout}>
