@@ -143,7 +143,7 @@ const Navbar = () => {
               {user && (
                 <li className="border-b border-b-gray-300 pb-2">
                   <Link
-                    to="/dashboard/my_profile"
+                    to="/dashboard"
                     className="flex items-center gap-2"
                   >
                     <div className="avatar avatar-online">
@@ -166,16 +166,16 @@ const Navbar = () => {
 
               {user && (
                 <li>
-                  <Link to="/apartment" className="flex items-center gap-2">
+                  <button onClick={handleLogout}  className="flex items-center gap-2">
                     <RiDashboardLine />
                     Logout
-                  </Link>
+                  </button>
                 </li>
               )}
 
               {!user && (
                 <li>
-                  <Link className="flex items-center gap-2">
+                  <Link className="flex items-center gap-2" to='/login'>
                     <FiLogIn />
                     Login
                   </Link>

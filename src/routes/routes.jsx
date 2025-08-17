@@ -47,6 +47,7 @@ const router = createBrowserRouter([
         path: "make_announcement",
         element: <AdminRoutes><MakeAnnouncement /></AdminRoutes>,
       },
+      
       {
         path: "agreement_requests",
         element: <AdminRoutes><AgreementRequests /></AdminRoutes>,
